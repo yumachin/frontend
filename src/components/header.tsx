@@ -13,9 +13,9 @@ export default function Header() {
   const { resolvedTheme } = useTheme()
   const [mounted, setMounted] = useState(false)
   const navItems = [
-    { label: "Home", href: "/" },
-    { label: "Ranking", href: "/ranking" },
-    { label: "Profile", href: "/profile" },
+    { label: "ホーム", href: "/" },
+    { label: "ランキング", href: "/ranking" },
+    { label: "プロフィール", href: "/profile" },
   ]
   const logo = resolvedTheme === "dark" ? darkLogo : lightLogo
   useEffect(() => {
@@ -23,7 +23,7 @@ export default function Header() {
   }, [])
   
   return (
-    <header className="fixed top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+    <header className="fixed top-0 z-50 w-full border-b bg-background">
       <div className="container mx-auto flex h-18 items-center justify-between px-4 sm:px-6 lg:px-8">
         {/* ロゴ */}
         {mounted && (

@@ -4,13 +4,13 @@ import { Crown, House, User } from "lucide-react"
 
 export default function Footer() {
   const navItems = [
-    { label: "Home", icon: <House className="h-10 w-10 p-0" />, href: "/" },
-    { label: "Ranking", icon: <Crown className="h-10 w-10" />, href: "/ranking" },
-    { label: "Profile", icon: <User className="h-10 w-10" />, href: "/profile" },
+    { label: "ホーム", icon: <House className="h-10 w-10 p-0" />, href: "/" },
+    { label: "ランキング", icon: <Crown className="h-10 w-10" />, href: "/ranking" },
+    { label: "プロフィール", icon: <User className="h-10 w-10" />, href: "/profile" },
   ]
 
   return (
-    <footer className="sm:hidden fixed bottom-0 left-0 w-full border-t bg-muted px-6 py-2 flex items-center justify-between z-50">
+    <footer className="sm:hidden fixed bottom-0 left-0 w-full border-t bg-muted px-6 flex items-center justify-between z-50">
       {/* ナビゲーションボタン */}
       <nav className="flex flex-1 justify-between">
         {navItems.map((item) => (
@@ -23,7 +23,7 @@ export default function Footer() {
               >
                 {item.icon}
               </Button>
-              <span className="text-xs tracking-tight">{item.label}</span>
+              <span className="text-xs tracking-tight pb-2">{item.label}</span>
             </div>
           </Link>
         ))}
