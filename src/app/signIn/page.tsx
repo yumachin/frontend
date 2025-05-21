@@ -18,7 +18,7 @@ export default function LandingPage() {
         <div className="container flex justify-between items-center">
           <div className="flex items-center gap-2">
             <Bug className="h-6 w-6" />
-            <span className="font-bold text-xl">BugHunt</span>
+            <span className="font-bold text-2xl">BugHunt</span>
           </div>
           <nav className="hidden md:flex items-center gap-4">
             <Link href="#" className="px-3 py-2 rounded-md bg-zinc-900">
