@@ -1,7 +1,6 @@
 "use client"
 
 import Link from "next/link"
-import { usePathname } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { ModeToggle } from "@/components/mode-toggle"
 import logo from "../../public/logo.png"
@@ -17,13 +16,11 @@ import {
 import { useState } from "react"
 
 export default function Header() {
-  const pathname = usePathname()
   const [open, setOpen] = useState(false)
 
   const navItems = [
     { label: "Home", href: "/" },
-    { label: "Quizzes", href: "/quizzes" },
-    { label: "Create", href: "/create" },
+    { label: "Ranking", href: "/ranking" },
     { label: "Profile", href: "/profile" },
   ]
 
