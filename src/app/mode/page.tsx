@@ -36,7 +36,7 @@ export default function Mode() {
                 <Link href="/quizzes?level=beginner" passHref>
                     <Button
                         size="lg"
-                        className="w-full h-20 text-xl font-semibold shadow-md hover:bg-blue-50 relative transition-all"
+                        className="w-full h-20 text-xl font-semibold shadow-md light:bg-black-900 relative transition-all light:text-white dark:hover:bg-gray-100"
                     >
                         初級
                         <span className="absolute right-4 bottom-2 text-sm flex items-center gap-1">
@@ -50,7 +50,7 @@ export default function Mode() {
                 <Link href="/quizzes?level=intermediate" passHref>
                     <Button
                         size="lg"
-                        className="w-full h-20 text-xl font-semibold shadow-md hover:bg-green-50 relative transition-all"
+                        className="w-full h-20 text-xl font-semibold shadow-md light:bg-black-900 relative transition-all light:text-white dark:hover:bg-gray-100"
                     >
                         中級
                         <span className="absolute right-4 bottom-2 text-sm flex items-center gap-1">
@@ -64,7 +64,7 @@ export default function Mode() {
                 <Link href="/quizzes?level=advanced" passHref>
                     <Button
                         size="lg"
-                        className="w-full h-20 text-xl font-semibold shadow-md hover:bg-red-50 relative transition-all"
+                        className="w-full h-20 text-xl font-semibold shadow-md light:bg-black-900 relative transition-all light:text-white dark:hover:bg-gray-100"
                     >
                         上級
                         <span className="absolute right-4 bottom-2 text-sm flex items-center gap-1">
