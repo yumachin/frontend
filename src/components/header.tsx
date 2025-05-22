@@ -12,24 +12,27 @@ import { usePathname } from "next/navigation"
 
 export default function Header() {
   const { resolvedTheme } = useTheme()
-  const pathname = usePathname()
-
-  // 表示したくないパス一覧
-  const hiddenPaths = ["/signIn", "/sign-up", "/reset-password"]
-
-  if (hiddenPaths.includes(pathname)) {
-    return <div /> // または return null; にしてもOK
-  }
   const [mounted, setMounted] = useState(false)
+
   const navItems = [
     { label: "ホーム", href: "/" },
     { label: "ランキング", href: "/ranking" },
     { label: "プロフィール", href: "/profile" },
   ]
+
   const logo = resolvedTheme === "dark" ? darkLogo : lightLogo
+
   useEffect(() => {
     setMounted(true)
   }, [])
+
+  const pathname = usePathname()
+  // 表示したくないパス一覧
+  const hiddenPaths = ["/signIn", "/sign-up", "/reset-password", "/quiz/easy/", "/quiz/normal/", "/quiz/hard/"]
+
+  if (hiddenPaths.some(prefix => pathname.startsWith(prefix))) {
+    return null
+  }
   
   return (
     <header className="fixed top-0 z-50 w-full border-b bg-background">
@@ -42,7 +45,7 @@ export default function Header() {
               alt="Logo"
               width={200}
               height={200}
-              className="h-8 w-36 lg:h-10 lg:w-48"
+              className="h-8 w-38 lg:h-10 lg:w-48"
             />
           </Link>
         )}
