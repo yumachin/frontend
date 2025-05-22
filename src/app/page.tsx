@@ -24,7 +24,7 @@ export default function Home() {
           </p>
         </div>
         <div className="flex flex-col sm:flex-row gap-3 sm:space-x-4">
-          <Link href="/quizzes" passHref>
+          <Link href="/mode" passHref>
             <Button size="lg" className="w-full sm:w-auto font-bold">
               シングルモード
             </Button>
