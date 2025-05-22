@@ -8,9 +8,18 @@ import lightLogo from "../../public/light-logo.png"
 import Image from "next/image"
 import { useTheme } from "next-themes"
 import { useEffect, useState } from "react";
+import { usePathname } from "next/navigation"
 
 export default function Header() {
   const { resolvedTheme } = useTheme()
+  const pathname = usePathname()
+
+  // 表示したくないパス一覧
+  const hiddenPaths = ["/signIn", "/sign-up", "/reset-password"]
+
+  if (hiddenPaths.includes(pathname)) {
+    return <div /> // または return null; にしてもOK
+  }
   const [mounted, setMounted] = useState(false)
   const navItems = [
     { label: "ホーム", href: "/" },
