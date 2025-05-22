@@ -9,6 +9,13 @@ import { Bug } from "lucide-react"
 export default function Header() {
   const pathname = usePathname()
 
+  // 表示したくないパス一覧
+  const hiddenPaths = ["/signIn", "/sign-up", "/reset-password"]
+
+  if (hiddenPaths.includes(pathname)) {
+    return <div /> // または return null; にしてもOK
+  }
+
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container flex h-14 items-center">
