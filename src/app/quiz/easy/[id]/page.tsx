@@ -76,7 +76,6 @@ export default function QuizPage() {
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center px-8 lg:px-0">
-      <div className="hidden lg:flex h-24"></div>
       <div className="w-full max-w-4xl">
         <div className="pt-6 rounded-2xl border-2 lg:border-3">
           {/* ヘッダー部分 */}
