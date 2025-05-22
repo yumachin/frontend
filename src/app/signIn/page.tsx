@@ -55,6 +55,31 @@ export default function SignInPage() {
 
   return (
     <div className="min-h-screen bg-black text-white flex flex-col">
+      {/* Header */}
+      <header className="border-b border-zinc-800 p-4">
+        <div className="container flex justify-between items-center">
+          <div className="flex items-center gap-2">
+            
+            <span className="font-bold text-xl">BugHunt</span>
+          </div>
+          <nav className="hidden md:flex items-center gap-4">
+            <Link href="#" className="px-3 py-2 rounded-md bg-zinc-900">
+              Home
+            </Link>
+            <Link href="#" className="px-3 py-2">
+              Quizzes
+            </Link>
+            <Link href="#" className="px-3 py-2">
+              Create
+            </Link>
+            <Link href="#" className="px-3 py-2">
+              Profile
+            </Link>
+          </nav>
+        </div>
+      </header>
+
+      {/* Main Content */}
       <main className="flex-1 flex items-center justify-center p-4">
         <Card className="w-full max-w-md bg-zinc-900 border-zinc-800">
           <CardHeader className="space-y-1">
