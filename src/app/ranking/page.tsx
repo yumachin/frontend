@@ -1,20 +1,21 @@
 "use client"
 
 import Footer from "@/components/footer"
+import Level from "@/components/level-ranking"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Card, CardContent } from "@/components/ui/card"
 import { ScrollArea } from "@/components/ui/scroll-area"
 
 // APIを叩いて取得
 const ranking = [
-  { userId: "1", userName: "Onishi", stats: { hardCorrectNum: 30, normalCorrectNum: 25, easyCorrectNum: 20 }},
-  { userId: "2", userName: "Kudo", stats: { hardCorrectNum: 30, normalCorrectNum: 20, easyCorrectNum: 20 }},
-  { userId: "3", userName: "Takahashi", stats: { hardCorrectNum: 25, normalCorrectNum: 15, easyCorrectNum: 20 }},
-  { userId: "4", userName: "Takami", stats: { hardCorrectNum: 25, normalCorrectNum: 15, easyCorrectNum: 15 }},
-  { userId: "5", userName: "Nakai", stats: { hardCorrectNum: 20, normalCorrectNum: 15, easyCorrectNum: 15 }},
-  { userId: "6", userName: "Noki", stats: { hardCorrectNum: 20, normalCorrectNum: 10, easyCorrectNum: 15 }},
-  { userId: "7", userName: "Yokoyama", stats: { hardCorrectNum: 15, normalCorrectNum: 10, easyCorrectNum: 10 }},
-  { userId: "8", userName: "Over", stats: { hardCorrectNum: 5, normalCorrectNum: 15, easyCorrectNum: 5 }},
+  { userId: "1", userName: "Onishi", stats: { hardCorrectNum: 30, normalCorrectNum: 25, easyCorrectNum: 20 } },
+  { userId: "2", userName: "Kudo", stats: { hardCorrectNum: 30, normalCorrectNum: 20, easyCorrectNum: 20 } },
+  { userId: "3", userName: "Takahashi", stats: { hardCorrectNum: 25, normalCorrectNum: 15, easyCorrectNum: 20 } },
+  { userId: "4", userName: "Takami", stats: { hardCorrectNum: 25, normalCorrectNum: 15, easyCorrectNum: 15 } },
+  { userId: "5", userName: "Nakai", stats: { hardCorrectNum: 20, normalCorrectNum: 15, easyCorrectNum: 15 } },
+  { userId: "6", userName: "Noki", stats: { hardCorrectNum: 20, normalCorrectNum: 10, easyCorrectNum: 15 } },
+  { userId: "7", userName: "Yokoyama", stats: { hardCorrectNum: 15, normalCorrectNum: 10, easyCorrectNum: 10 } },
+  { userId: "8", userName: "Over", stats: { hardCorrectNum: 5, normalCorrectNum: 15, easyCorrectNum: 5 } },
 ]
 
 export default function RankingPage() {
@@ -33,6 +34,7 @@ export default function RankingPage() {
       <p className="text-sm text-muted-foreground text-center mb-6">
         Tech Arena のトッププレイヤーたち
       </p>
+      <Level/>
       <ScrollArea className="lg:h-[70vh]">
         <div className="space-y-6">
           {(() => {
