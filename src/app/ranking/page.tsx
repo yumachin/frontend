@@ -1,12 +1,12 @@
 "use client"
 
+import { useState } from "react"
 import Footer from "@/components/footer"
 import Level from "@/components/level-ranking"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Card, CardContent } from "@/components/ui/card"
 import { ScrollArea } from "@/components/ui/scroll-area"
 
-// APIを叩いて取得
 const ranking = [
   { userId: "1", userName: "Onishi", stats: { hardCorrectNum: 30, normalCorrectNum: 25, easyCorrectNum: 20 } },
   { userId: "2", userName: "Kudo", stats: { hardCorrectNum: 30, normalCorrectNum: 20, easyCorrectNum: 20 } },
@@ -16,15 +16,18 @@ const ranking = [
   { userId: "6", userName: "Noki", stats: { hardCorrectNum: 20, normalCorrectNum: 10, easyCorrectNum: 15 } },
   { userId: "7", userName: "Yokoyama", stats: { hardCorrectNum: 15, normalCorrectNum: 10, easyCorrectNum: 10 } },
   { userId: "8", userName: "Over", stats: { hardCorrectNum: 5, normalCorrectNum: 15, easyCorrectNum: 5 } },
-]
+];
 
 export default function RankingPage() {
-  const userId = "5"; // ログインユーザーのuserIdを取得
+  const userId = "5";
+  const [level, setLevel] = useState<"easy" | "normal" | "hard">("easy");
+  const [selectedLevel, setSelectedLevel] = useState<"easy" | "normal" | "hard">("normal")
+
   const sortedRanking = [...ranking].map(user => (
     { ...user, isMe: user.userId === userId }
   )).sort((a, b) => {
-    const totalA = a.stats.hardCorrectNum + a.stats.normalCorrectNum + a.stats.easyCorrectNum;
-    const totalB = b.stats.hardCorrectNum + b.stats.normalCorrectNum + b.stats.easyCorrectNum;
+    const totalA = a.stats[`${level}CorrectNum`];
+    const totalB = b.stats[`${level}CorrectNum`];
     return totalB - totalA;
   });
 
@@ -32,10 +35,12 @@ export default function RankingPage() {
     <div className="min-h-screen py-25 lg:pb-12 px-6 lg:px-96">
       <h1 className="text-2xl font-bold mb-4 text-center">正答数ランキング</h1>
       <p className="text-sm text-muted-foreground text-center mb-6">
-        Tech Arena のトッププレイヤーたち
+        Tech Arena のトッププレイヤーたち（{level === "easy" ? "初級" : level === "normal" ? "中級" : "上級"}）
       </p>
-      <Level/>
-      <ScrollArea className="lg:h-[70vh]">
+
+      <Level onLevelChange={setSelectedLevel} selectedLevel={selectedLevel} />
+
+      <ScrollArea className="lg:h-[70vh] mt-4">
         <div className="space-y-6">
           {(() => {
             let prevScore: number | null = null;
@@ -43,9 +48,8 @@ export default function RankingPage() {
             let sameRankCount = 0;
 
             return sortedRanking.map((user) => {
-              const score = user.stats.hardCorrectNum + user.stats.normalCorrectNum + user.stats.easyCorrectNum;
+              const score = user.stats[`${level}CorrectNum`];
 
-              // スコアが前の人と同じなら、同じ順位
               if (score === prevScore) {
                 sameRankCount++;
               } else {
@@ -81,7 +85,8 @@ export default function RankingPage() {
           })()}
         </div>
       </ScrollArea>
+
       <Footer />
     </div>
-  )
+  );
 }
