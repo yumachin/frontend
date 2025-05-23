@@ -1,18 +1,37 @@
 "use client"
 
-import { Baby, Skull, Smile } from "lucide-react"
+import { Baby , Crown, Skull, Smile} from "lucide-react"
 
-type LevelProps = {
-    onLevelChange: (level: "easy" | "normal" | "hard") => void
-    selectedLevel: "easy" | "normal" | "hard"
+type LevelType = "easy" | "normal" | "hard" | "all"
+
+interface LevelProps {
+    selectedLevel: LevelType
+    onLevelChange: (level: LevelType) => void
 }
 
-export default function Level({ onLevelChange, selectedLevel }: LevelProps) {
+export default function Level({ selectedLevel, onLevelChange }: LevelProps) {
     const navItems = [
-        { label: "初級", icon: <Baby className="h-6 w-6" />, value: "easy" },
-        { label: "中級", icon: <Smile className="h-6 w-6" />, value: "normal" },
-        { label: "上級", icon: <Skull className="h-6 w-6" />, value: "hard" },
-    ];
+        {
+            value: "easy",
+            label: "初級",
+            icon: <Baby className="w-6 h-6" />,
+        },
+        {
+            value: "normal",
+            label: "中級",
+            icon: <Smile className="w-6 h-6" />,
+        },
+        {
+            value: "hard",
+            label: "上級",
+            icon: <Skull className="w-6 h-6" />,
+        },
+        {
+            value: "all",
+            label: "総合",
+            icon: <Crown className="w-6 h-6" />,
+        },
+    ] as const
 
     return (
         <footer className="py-4 border-t">
