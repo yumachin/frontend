@@ -28,7 +28,7 @@ export default function Level({ selectedLevel, onLevelChange }: LevelProps) {
         },
         {
             value: "all",
-            label: "総合",
+            label: "総合(開発中)",
             icon: <Crown className="w-6 h-6" />,
         },
     ] as const
