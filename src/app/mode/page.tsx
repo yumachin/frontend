@@ -33,7 +33,7 @@ export default function Mode() {
 
             <div className="flex flex-col w-full max-w-xs gap-6 sm:max-w-md">
                 {/* 初級 */}
-                <Link href="/quizzes?level=beginner" passHref>
+                <Link href="/quiz/easy" passHref>
                     <Button
                         size="lg"
                         className="w-full h-20 text-xl font-semibold shadow-md light:bg-black-900 relative transition-all light:text-white dark:hover:bg-gray-100"
@@ -47,7 +47,7 @@ export default function Mode() {
                 </Link>
 
                 {/* 中級 */}
-                <Link href="/quizzes?level=intermediate" passHref>
+                <Link href="/quiz/normal" passHref>
                     <Button
                         size="lg"
                         className="w-full h-20 text-xl font-semibold shadow-md light:bg-black-900 relative transition-all light:text-white dark:hover:bg-gray-100"
@@ -61,7 +61,7 @@ export default function Mode() {
                 </Link>
 
                 {/* 上級 */}
-                <Link href="/quizzes?level=advanced" passHref>
+                <Link href="/quiz/hard" passHref>
                     <Button
                         size="lg"
                         className="w-full h-20 text-xl font-semibold shadow-md light:bg-black-900 relative transition-all light:text-white dark:hover:bg-gray-100"

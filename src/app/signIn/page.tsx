@@ -16,10 +16,12 @@ import {
 import { auth } from "@/lib/firebase" // ← auth を正しく export していること
 import { GoogleAuthProvider, signInWithPopup } from "firebase/auth"
 import { useRouter } from "next/navigation"
+import { useUser } from "@/context/UserContext"
 
 export default function SignInPage() {
   const [showPassword, setShowPassword] = useState(false)
   const [isSigningIn, setIsSigningIn] = useState(false)
+  const { setUser } = useUser()
 
   const handleGoogleLogin = async (): Promise<boolean> => {
     if (isSigningIn) return false
@@ -28,17 +30,27 @@ export default function SignInPage() {
     const provider = new GoogleAuthProvider()
 
     try {
-    const result = await signInWithPopup(auth, provider)
-    const user = result.user
-    console.log("ログイン成功:", user)
-    return true
-  } catch (error) {
-    console.error("ログイン失敗:", error)
-    return false
-  } finally {
-    setIsSigningIn(false)
+      const result = await signInWithPopup(auth, provider)
+      const user = result.user
+      const token = await user.getIdToken()
+      
+      const userObject = {
+        email: user.email || "",
+        userName: user.displayName || "",
+        token,
+      }
+
+      setUser(userObject)
+      localStorage.setItem("user", JSON.stringify(userObject))
+      console.log("ログイン成功:", user)
+      return true
+    } catch (error) {
+      console.error("ログイン失敗:", error)
+      return false
+    } finally {
+      setIsSigningIn(false)
+    }
   }
-}
 
   const Router = useRouter()
 
@@ -46,12 +58,12 @@ export default function SignInPage() {
     Router.push("/")
   }
 
- const handleFirstRouting = async () => {
-  const success = await handleGoogleLogin()
-  if (success) {
-    handleRoutingHome()
+  const handleFirstRouting = async () => {
+    const success = await handleGoogleLogin()
+    if (success) {
+      handleRoutingHome()
+    }
   }
-}
 
   return (
     <div className="min-h-screen bg-black text-white flex flex-col">

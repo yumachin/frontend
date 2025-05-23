@@ -1,8 +1,13 @@
+"use client"
+
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import Footer from "@/components/footer"
 import { Progress } from "@/components/ui/progress"
+import { Button } from "@/components/ui/button"
+import { useState } from "react"
+import { useUser } from "@/context/UserContext"
 interface StatsProps {
   difficulty: string;
   clearNum: number;
@@ -29,6 +34,8 @@ const DifficultyProgress = ({ difficulty, clearNum, correctNum }: StatsProps) =>
 };
 
 export default function ProfilePage() {
+  const [isEditing, setIsEditing] = useState(false);
+
   const user = {
     userId: "5",
     email: "e1922047@oit.ac.jp",
@@ -63,8 +70,15 @@ export default function ProfilePage() {
           <TabsContent value="overview" className="space-y-12">
             <div className="grid gap-4 lg:grid-cols-4">
               <Card className="col-span-2">
-                <CardHeader>
+                <CardHeader className="flex items-center justify-between">
                   <CardTitle>プロフィール</CardTitle>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => setIsEditing((prev) => !prev)}
+                  >
+                    {isEditing ? "保存(開発中)" : "編集（開発中）"}
+                  </Button>
                 </CardHeader>
                 <CardContent className="flex items-center gap-8">
                   <Avatar className="h-24 w-24">
@@ -122,42 +136,13 @@ export default function ProfilePage() {
           </TabsContent>
 
           <TabsContent value="settings">
-            {/* <Card>
-              <CardHeader>
-                <CardTitle>Account Settings</CardTitle>
-                <CardDescription>Manage your account settings and preferences</CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="space-y-2">
-                  <h3 className="font-medium">Profile Information</h3>
-                  <p className="text-sm text-muted-foreground">
-                    Update your profile information and how others see you on the platform
-                  </p>
-                  <Button variant="outline">Edit Profile</Button>
-                </div>
-
-                <div className="space-y-2">
-                  <h3 className="font-medium">Email Notifications</h3>
-                  <p className="text-sm text-muted-foreground">Manage your email notification preferences</p>
-                  <Button variant="outline">Notification Settings</Button>
-                </div>
-
-                <div className="space-y-2">
-                  <h3 className="font-medium">Account Security</h3>
-                  <p className="text-sm text-muted-foreground">Update your password and security settings</p>
-                  <Button variant="outline">Security Settings</Button>
-                </div>
-
-                <div className="space-y-2">
-                  <h3 className="font-medium">Connected Accounts</h3>
-                  <p className="text-sm text-muted-foreground">Connect your account with GitHub or Google</p>
-                  <div className="flex gap-2">
-                    <Button variant="outline">Connect GitHub</Button>
-                    <Button variant="outline">Connect Google</Button>
-                  </div>
-                </div>
-              </CardContent>
-            </Card> */}
+            <div className="space-y-4">
+              <h2 className="text-lg font-bold">設定</h2>
+              <p className="text-sm text-muted-foreground">この機能は開発中です。</p>
+              <Button variant="outline" className="w-full bg-red-500 dark:bg-red-500 text-white hover:text-white hover:bg-red-600 dark:hover:bg-red-600">
+                ログアウト
+              </Button>
+            </div>
           </TabsContent>
         </Tabs>
       </div>
