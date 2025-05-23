@@ -20,14 +20,14 @@ const ranking = [
 
 export default function RankingPage() {
   const userId = "5";
-  const [level, setLevel] = useState<"easy" | "normal" | "hard">("easy");
+  // const [level, setLevel] = useState<"easy" | "normal" | "hard">("easy");
   const [selectedLevel, setSelectedLevel] = useState<"easy" | "normal" | "hard">("normal")
 
   const sortedRanking = [...ranking].map(user => (
     { ...user, isMe: user.userId === userId }
   )).sort((a, b) => {
-    const totalA = a.stats[`${level}CorrectNum`];
-    const totalB = b.stats[`${level}CorrectNum`];
+    const totalA = a.stats[`${selectedLevel}CorrectNum`];
+    const totalB = b.stats[`${selectedLevel}CorrectNum`];
     return totalB - totalA;
   });
 
@@ -35,7 +35,7 @@ export default function RankingPage() {
     <div className="min-h-screen py-25 lg:pb-12 px-6 lg:px-96">
       <h1 className="text-2xl font-bold mb-4 text-center">正答数ランキング</h1>
       <p className="text-sm text-muted-foreground text-center mb-6">
-        Tech Arena のトッププレイヤーたち（{level === "easy" ? "初級" : level === "normal" ? "中級" : "上級"}）
+        Tech Arena のトッププレイヤーたち（{selectedLevel === "easy" ? "初級" : selectedLevel === "normal" ? "中級" : "上級"}）
       </p>
 
       <Level onLevelChange={setSelectedLevel} selectedLevel={selectedLevel} />
@@ -48,7 +48,7 @@ export default function RankingPage() {
             let sameRankCount = 0;
 
             return sortedRanking.map((user) => {
-              const score = user.stats[`${level}CorrectNum`];
+              const score = user.stats[`${selectedLevel}CorrectNum`];
 
               if (score === prevScore) {
                 sameRankCount++;
