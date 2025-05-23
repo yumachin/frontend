@@ -9,6 +9,7 @@ type Question = {
   questionId: number
   question: string
   choices: Choice[]
+  answer: string
 }
 
 type Choice = {
@@ -26,6 +27,7 @@ const questions: Question[] = [
       {key: "C", text: "通信の開始と終了の管理"},
       {key: "D", text: "エラー検出と訂正"},
     ],
+    answer: "C",
   },
   {
     questionId: 12,
@@ -36,6 +38,7 @@ const questions: Question[] = [
       {key: "C", text: "Hyperlink and Text Markup Language"},
       {key: "D", text: "Hyperlink Transfer Mark Language"},
     ],
+    answer: "A",
   },
   {
     questionId: 25,
@@ -46,6 +49,7 @@ const questions: Question[] = [
       {key: "C", text: "Hyperlink and Text Markup Language"},
       {key: "D", text: "Hyperlink Transfer Mark Language"},
     ],
+    answer: "A",
   },
 ]
 
