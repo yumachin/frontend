@@ -13,15 +13,15 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
-import { auth } from "@/lib/firebase" // ← auth を正しく export していること
+import { auth } from "@/lib/firebase"
 import { GoogleAuthProvider, signInWithPopup } from "firebase/auth"
 import { useRouter } from "next/navigation"
-import { useUser } from "@/context/UserContext"
+import { Resister } from "@/lib/api/auth"
+import Cookies from "js-cookie"
 
 export default function SignInPage() {
   const [showPassword, setShowPassword] = useState(false)
   const [isSigningIn, setIsSigningIn] = useState(false)
-  const { setUser } = useUser()
 
   const handleGoogleLogin = async (): Promise<boolean> => {
     if (isSigningIn) return false
@@ -33,15 +33,20 @@ export default function SignInPage() {
       const result = await signInWithPopup(auth, provider)
       const user = result.user
       const token = await user.getIdToken()
-      
+
+      Cookies.set("token", token, {
+        expires: 1,
+        secure: true,
+        sameSite: "none",
+      })
+
       const userObject = {
         email: user.email || "",
         userName: user.displayName || "",
-        token,
+        userId: user.uid || "",
       }
 
-      setUser(userObject)
-      localStorage.setItem("user", JSON.stringify(userObject))
+      // await Resister(userObject)
       console.log("ログイン成功:", user)
       return true
     } catch (error) {
@@ -76,19 +81,19 @@ export default function SignInPage() {
           <CardContent className="space-y-4">
             <div className="space-y-2">
               <Label htmlFor="email" className="text-zinc-300">
-                メールアドレス
+                メールアドレス（開発予定）
               </Label>
               <Input
                 id="email"
                 type="email"
-                placeholder="you@example.com"
+                placeholder="you@example.com（開発予定）"
                 className="bg-zinc-800 border-zinc-700 text-white placeholder:text-zinc-500"
               />
             </div>
             <div className="space-y-2">
               <div className="flex items-center justify-between">
                 <Label htmlFor="password" className="text-zinc-300">
-                  パスワード
+                  パスワード（開発予定）
                 </Label>
                 <Link href="#" className="text-xs text-zinc-400 hover:text-white">
                   パスワードをお忘れですか？
@@ -99,7 +104,7 @@ export default function SignInPage() {
                   id="password"
                   type={showPassword ? "text" : "password"}
                   className="bg-zinc-800 border-zinc-700 text-white pr-10 placeholder:text-zinc-500"
-                  placeholder="••••••••"
+                  placeholder="••••••••（開発予定）"
                 />
                 <button
                   type="button"
@@ -111,7 +116,7 @@ export default function SignInPage() {
               </div>
               <div className="text-xs text-zinc-500 font-mono">※ セキュリティのため8文字以上</div>
             </div>
-            <Button className="w-full bg-white text-black hover:bg-zinc-200">ログイン</Button>
+            <Button className="w-full bg-white text-black hover:bg-zinc-200">ログイン（開発予定）</Button>
             <div className="relative">
               <div className="absolute inset-0 flex items-center">
                 <span className="w-full border-t border-zinc-700" />
