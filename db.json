@@ -1,0 +1,64 @@
+{
+    "ranking": {
+        "hard": [
+            {
+                "userId": "u_id1",
+                "userName": "kiyoya",
+                "rank": 1,
+                "correctNum": 11
+            },
+            {
+                "userId": "u_id2",
+                "userName": "kiyoyaJP",
+                "rank": 2,
+                "correctNum": 22
+            },
+            {
+                "userId": "u_id3",
+                "userName": "kiyoyaEN",
+                "rank": 3,
+                "correctNum": 33
+            }
+        ],
+        "normal": [
+            {
+                "userId": "u_id1",
+                "userName": "kiyoya",
+                "rank": 1,
+                "correctNum": 40
+            },
+            {
+                "userId": "u_id2",
+                "userName": "kiyoyaJP",
+                "rank": 2,
+                "correctNum": 10
+            },
+            {
+                "userId": "u_id3",
+                "userName": "kiyoyaEN",
+                "rank": 3,
+                "correctNum": 50
+            }
+        ],
+        "easy": [
+            {
+                "userId": "u_id1",
+                "userName": "kiyoya",
+                "rank": 1,
+                "correctNum": 60
+            },
+            {
+                "userId": "u_id2",
+                "userName": "kiyoyaJP",
+                "rank": 2,
+                "correctNum": 20
+            },
+            {
+                "userId": "u_id3",
+                "userName": "kiyoyaEN",
+                "rank": 3,
+                "correctNum": 30
+            }
+        ]
+    }
+}
