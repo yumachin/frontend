@@ -20,24 +20,48 @@ const ranking = [
 
 export default function RankingPage() {
   const userId = "5";
-  const [level, setLevel] = useState<"easy" | "normal" | "hard">("easy");
-  const [selectedLevel, setSelectedLevel] = useState<"easy" | "normal" | "hard">("normal")
+  const [selectedLevel, setSelectedLevel] = useState<"easy" | "normal" | "hard" | "all">("normal");
 
-  const sortedRanking = [...ranking].map(user => (
-    { ...user, isMe: user.userId === userId }
-  )).sort((a, b) => {
-    const totalA = a.stats[`${level}CorrectNum`];
-    const totalB = b.stats[`${level}CorrectNum`];
-    return totalB - totalA;
-  });
+  const sortedRanking = [...ranking].map(user => {
+    const { hardCorrectNum, normalCorrectNum, easyCorrectNum } = user.stats;
+
+    // スコア計算
+    const score =
+      selectedLevel === "easy"
+        ? easyCorrectNum
+        : selectedLevel === "normal"
+          ? normalCorrectNum
+          : selectedLevel === "hard"
+            ? hardCorrectNum
+            : // "all" の場合は重み付きスコア
+            easyCorrectNum * 1 + normalCorrectNum * 2 + hardCorrectNum * 3;
+
+    return {
+      ...user,
+      isMe: user.userId === userId,
+      score,
+    };
+  }).sort((a, b) => b.score - a.score);
 
   return (
     <div className="min-h-screen py-25 lg:pb-12 px-6 lg:px-96">
       <h1 className="text-2xl font-bold mb-4 text-center">正答数ランキング</h1>
-      <p className="text-sm text-muted-foreground text-center mb-6">
-        Tech Arena のトッププレイヤーたち（{level === "easy" ? "初級" : level === "normal" ? "中級" : "上級"}）
+      <p className="text-sm text-muted-foreground text-center">
+        Tech Arena のトッププレイヤーたち（
+        {selectedLevel === "easy"
+          ? "初級"
+          : selectedLevel === "normal"
+            ? "中級"
+            : selectedLevel === "hard"
+              ? "上級"
+              : "総合"}
+        ）
+      </p>
+      <p className="text-xs text-muted-foreground text-center mb-6">
+        ＊初級は１pt、中級は２pt、上級は３pt換算
       </p>
 
+      {/* Levelコンポーネントは "all" を扱えるように拡張してください */}
       <Level onLevelChange={setSelectedLevel} selectedLevel={selectedLevel} />
 
       <ScrollArea className="lg:h-[70vh] mt-4">
@@ -48,7 +72,7 @@ export default function RankingPage() {
             let sameRankCount = 0;
 
             return sortedRanking.map((user) => {
-              const score = user.stats[`${level}CorrectNum`];
+              const score = user.score;
 
               if (score === prevScore) {
                 sameRankCount++;
