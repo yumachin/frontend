@@ -56,7 +56,12 @@ export default function Home() {
             </Button>
           </Link>
           <Link href="/" passHref>
-            <Button variant="outline" size="lg" className="w-full sm:w-auto font-bold">
+            <Button 
+              variant="outline" 
+              size="lg" 
+              className="w-full sm:w-auto font-bold"
+              onClick={() => alert("マルチモードは現在開発中です。")}
+            >
               マルチモード（開発中）
             </Button>
           </Link>
