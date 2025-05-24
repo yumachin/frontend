@@ -62,6 +62,11 @@ export default function ProfilePage() {
   const solvedCount = user.stats.hardClearNum + user.stats.normalClearNum + user.stats.easyClearNum
   const correctCount = user.stats.hardCorrectNum + user.stats.normalCorrectNum + user.stats.easyCorrectNum
 
+  const handleEdit = () => {
+    setIsEditing(prev => !prev);
+    alert("この機能は開発中です。");
+  }
+
   const handleLogout = () => {
     Cookies.remove("token", { path: "/" });
     setUser(null);
@@ -86,7 +91,7 @@ export default function ProfilePage() {
                   <Button
                     variant="outline"
                     size="sm"
-                    onClick={() => setIsEditing((prev) => !prev)}
+                    onClick={handleEdit}
                   >
                     {isEditing ? "保存(開発中)" : "編集（開発中）"}
                   </Button>
