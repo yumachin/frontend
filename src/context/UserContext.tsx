@@ -1,11 +1,24 @@
 "use client"
 
+import { GetProfile } from "@/lib/api/user"
 import { createContext, useContext, useState, ReactNode, useEffect } from "react"
 
 type User = {
-  email: string
-  userName: string
-  token: string
+  userId: string,
+  email: string,
+  userName: string,
+  iconPath: string,
+  role: "user" | "admin",
+  stats: {
+    hardClearNum: number,
+    normalClearNum: number,
+    easyClearNum: number,
+    hardCorrectNum: number,
+    normalCorrectNum: number,
+    easyCorrectNum: number
+  },
+  createdAt: string,
+  updatedAt: string
 } | null
 
 type UserContextType = {
@@ -18,18 +31,19 @@ const UserContext = createContext<UserContextType | undefined>(undefined)
 export const UserProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<User>(null)
 
-  useEffect(() => {
-    const stored = localStorage.getItem("user")
-    if (stored) {
-      try {
-        const parsed = JSON.parse(stored)
-        setUser(parsed)
-      } catch (e) {
-        console.error("ユーザーデータの読み込みに失敗しました", e)
-        localStorage.removeItem("user")
-      }
-    }
-  }, [])
+  // useEffect(() => {
+  //   const fetchUser = async () => {
+  //     try {
+  //       const profile = await GetProfile()
+  //       setUser(profile)
+  //     } catch (err) {
+  //       console.error("ユーザー情報の取得に失敗しました:", err)
+  //       setUser(null)
+  //     }
+  //   };
+
+  //   fetchUser();
+  // }, []);
 
   return (
     <UserContext.Provider value={{ user, setUser }}>

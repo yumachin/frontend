@@ -8,7 +8,10 @@ import { Progress } from "@/components/ui/progress"
 import { Button } from "@/components/ui/button"
 import { useState } from "react"
 import { useUser } from "@/context/UserContext"
-interface StatsProps {
+import Cookies from "js-cookie"
+import { useRouter } from "next/navigation"
+
+type StatsProps = {
   difficulty: string;
   clearNum: number;
   correctNum: number;
@@ -35,12 +38,14 @@ const DifficultyProgress = ({ difficulty, clearNum, correctNum }: StatsProps) =>
 
 export default function ProfilePage() {
   const [isEditing, setIsEditing] = useState(false);
+  const { setUser } = useUser();
+  const router = useRouter();
 
   const user = {
-    userId: "5",
+    userId: "5vcsdvasjhviaer",
     email: "e1922047@oit.ac.jp",
     userName: "中井裕麻",
-    iconPath: "/images/user.png",
+    iconPath: "default.png",
     role: "user",
     stats: {
       hardClearNum: 3,
@@ -50,12 +55,23 @@ export default function ProfilePage() {
       normalCorrectNum: 5,
       easyCorrectNum: 7
     },
-    createdAt: "2024-01-01T00:00:00Z",
-    updatedAt: "2024-01-01T00:00:00Z"
+    createdAt: "2025-05-24T08:53:18.000Z",
+    updatedAt: "2025-05-24T08:53:18.000Z"
   }
 
   const solvedCount = user.stats.hardClearNum + user.stats.normalClearNum + user.stats.easyClearNum
   const correctCount = user.stats.hardCorrectNum + user.stats.normalCorrectNum + user.stats.easyCorrectNum
+
+  const handleEdit = () => {
+    setIsEditing(prev => !prev);
+    alert("この機能は開発中です。");
+  }
+
+  const handleLogout = () => {
+    Cookies.remove("token", { path: "/" });
+    setUser(null);
+    router.push("/signIn");
+  }
 
   return (
     <div className="flex flex-col items-center">
@@ -75,14 +91,14 @@ export default function ProfilePage() {
                   <Button
                     variant="outline"
                     size="sm"
-                    onClick={() => setIsEditing((prev) => !prev)}
+                    onClick={handleEdit}
                   >
                     {isEditing ? "保存(開発中)" : "編集（開発中）"}
                   </Button>
                 </CardHeader>
                 <CardContent className="flex items-center gap-8">
                   <Avatar className="h-24 w-24">
-                    <AvatarImage src={user.iconPath} alt={user.userName} />
+                    <AvatarImage src={`${process.env.NEXT_PUBLIC_API_URL}/${user.iconPath}`} alt={user.userName} />
                     <AvatarFallback>{user.userName.charAt(0)}</AvatarFallback>
                   </Avatar>
                   <div>
@@ -117,17 +133,17 @@ export default function ProfilePage() {
               </CardHeader>
               <CardContent className="grid gap-6 lg:gap-12">
                 <DifficultyProgress 
-                  difficulty="易" 
+                  difficulty="初級" 
                   clearNum={user.stats.easyClearNum} 
                   correctNum={user.stats.easyCorrectNum} 
                 />
                 <DifficultyProgress 
-                  difficulty="中" 
+                  difficulty="中級" 
                   clearNum={user.stats.normalClearNum} 
                   correctNum={user.stats.normalCorrectNum} 
                 />
                 <DifficultyProgress 
-                  difficulty="難" 
+                  difficulty="上級" 
                   clearNum={user.stats.hardClearNum} 
                   correctNum={user.stats.hardCorrectNum} 
                 />
@@ -139,7 +155,11 @@ export default function ProfilePage() {
             <div className="space-y-4">
               <h2 className="text-lg font-bold">設定</h2>
               <p className="text-sm text-muted-foreground">この機能は開発中です。</p>
-              <Button variant="outline" className="w-full bg-red-500 dark:bg-red-500 text-white hover:text-white hover:bg-red-600 dark:hover:bg-red-600">
+              <Button 
+                variant="outline" 
+                className="w-full bg-red-500 dark:bg-red-500 text-white hover:text-white hover:bg-red-600 dark:hover:bg-red-600"
+                onClick={handleLogout}
+              >
                 ログアウト
               </Button>
             </div>

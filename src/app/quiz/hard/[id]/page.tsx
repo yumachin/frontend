@@ -85,7 +85,7 @@ export default function QuizPage() {
           {/* ヘッダー部分 */}
           <div className="relative">
             <div className="absolute left-4 font-semibold rounded-full h-12 w-12 lg:h-14 lg:w-14 flex items-center justify-center text-md lg:text-xl border-2 lg:border-3">
-              難
+              上
             </div>
             <div className="text-right pt-4 lg:pt-6 pr-8">
               <span className="text-2xl">{id}</span>
