@@ -22,6 +22,7 @@ import Cookies from "js-cookie"
 export default function SignInPage() {
   const [showPassword, setShowPassword] = useState(false)
   const [isSigningIn, setIsSigningIn] = useState(false)
+  const oneHourLater = new Date(new Date().getTime() + 1 * 60 * 60 * 1000);
 
   const handleGoogleLogin = async (): Promise<boolean> => {
     if (isSigningIn) return false
@@ -35,7 +36,8 @@ export default function SignInPage() {
       const token = await user.getIdToken()
 
       Cookies.set("token", token, {
-        expires: 1,
+        // トークンの有効期限はまた話し合って決めたい
+        expires: oneHourLater,
         secure: true,
         sameSite: "none",
       })
@@ -86,7 +88,7 @@ export default function SignInPage() {
               <Input
                 id="email"
                 type="email"
-                placeholder="you@example.com（開発予定）"
+                placeholder="you@example.com"
                 className="bg-zinc-800 border-zinc-700 text-white placeholder:text-zinc-500"
               />
             </div>
@@ -95,7 +97,7 @@ export default function SignInPage() {
                 <Label htmlFor="password" className="text-zinc-300">
                   パスワード（開発予定）
                 </Label>
-                <Link href="#" className="text-xs text-zinc-400 hover:text-white">
+                <Link href="#" onClick={() => alert("パスワードの再設定機能は開発中です。")} className="text-xs text-zinc-400 hover:text-white">
                   パスワードをお忘れですか？
                 </Link>
               </div>
@@ -104,7 +106,7 @@ export default function SignInPage() {
                   id="password"
                   type={showPassword ? "text" : "password"}
                   className="bg-zinc-800 border-zinc-700 text-white pr-10 placeholder:text-zinc-500"
-                  placeholder="••••••••（開発予定）"
+                  placeholder="••••••••"
                 />
                 <button
                   type="button"
@@ -116,7 +118,12 @@ export default function SignInPage() {
               </div>
               <div className="text-xs text-zinc-500 font-mono">※ セキュリティのため8文字以上</div>
             </div>
-            <Button className="w-full bg-white text-black hover:bg-zinc-200">ログイン（開発予定）</Button>
+            <Button
+              className="w-full bg-white text-black hover:bg-zinc-200"
+              onClick={() => alert("ログイン機能は開発中です。")}
+            >
+              ログイン（開発予定）
+            </Button>
             <div className="relative">
               <div className="absolute inset-0 flex items-center">
                 <span className="w-full border-t border-zinc-700" />
@@ -137,7 +144,7 @@ export default function SignInPage() {
           <CardFooter className="flex flex-col space-y-4 pt-0">
             <div className="text-center text-sm text-zinc-400">
               アカウントをお持ちでないですか？{" "}
-              <Link href="#" className="text-white hover:underline">
+              <Link href="#" onClick={() => alert("新規登録機能は開発中です。")} className="text-white hover:underline">
                 新規登録
               </Link>
             </div>

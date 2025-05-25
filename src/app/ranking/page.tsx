@@ -125,7 +125,7 @@ export default function RankingPage() {
     }
     const userScoreMap = {} as Record<string, UserScore>;
 
-    for (const level in rankingData) {
+    (Object.keys(rankingData) as (keyof RankingData)[]).forEach((level) => {
       for (const score of rankingData[level]) {
         if (userScoreMap[score.userId] === undefined) {
           userScoreMap[score.userId] = {
@@ -138,7 +138,7 @@ export default function RankingPage() {
         userScoreMap[score.userId].score +=
           score.correctNum * WEIGHT[level as keyof typeof WEIGHT];
       }
-    }
+    });
     const userScoreMapFn = (score: Score): UserScore => ({
       userId: score.userId,
       userName: score.userName,
