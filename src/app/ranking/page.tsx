@@ -88,7 +88,7 @@ export default function RankingPage() {
   const userId = "5";
   const [selectedLevel, setSelectedLevel] = useState<
     "easy" | "normal" | "hard" | "all"
-  >("normal");
+  >("all");
   const [rankingData, setRankingData] = useState<RankingData | undefined>(
     undefined
   );
@@ -102,7 +102,9 @@ export default function RankingPage() {
 
   useEffect(() => {
     (async () => {
-      const res = await fetch("http://localhost:4000/ranking");
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/rankings/`, {
+        cache: "no-store"
+      });
       const data = (await res.json()) as RankingData;
       setRankingData(data);
     })();
