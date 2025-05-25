@@ -134,7 +134,7 @@ export default function SignInPage() {
             </div>
             <Button
               variant="outline"
-              className="w-full border-zinc-700 light:text-white dark:text-black hover:bg-zinc-800 hover:text-white"
+              className="w-full border-zinc-700 hover:text-white dark:text-black hover:bg-zinc-800 dark:bg-white dark:hover:text-white"
               onClick={handleFirstRouting}
               disabled={isSigningIn}
             >
