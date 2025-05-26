@@ -4,9 +4,9 @@ import { Crown, House, User } from "lucide-react"
 
 export default function Footer() {
   const navItems = [
-    { label: "ホーム", icon: <House className="h-10 w-10 p-0" />, href: "/" },
-    { label: "ランキング", icon: <Crown className="h-10 w-10" />, href: "/ranking" },
-    { label: "プロフィール", icon: <User className="h-10 w-10" />, href: "/profile" },
+    { label: "ホーム", icon: House, href: "/" },
+    { label: "ランキング", icon: Crown, href: "/ranking" },
+    { label: "プロフィール", icon: User, href: "/profile" },
   ]
 
   return (
@@ -14,14 +14,14 @@ export default function Footer() {
       {/* ナビゲーションボタン */}
       <nav className="flex flex-1 justify-between">
         {navItems.map((item) => (
-          <Link key={item.href} href={item.href} passHref>
+          <Link key={item.label} href={item.href}>
             <div className="flex flex-col items-center w-full">
               <Button
                 asChild
                 variant="ghost"
                 className="w-full justify-center"
               >
-                {item.icon}
+                <item.icon className="h-6 w-6" />
               </Button>
               <span className="text-xs tracking-tight pb-2">{item.label}</span>
             </div>

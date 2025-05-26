@@ -13,13 +13,16 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
-import { auth } from "@/lib/firebase" // ← auth を正しく export していること
+import { auth } from "@/lib/firebase"
 import { GoogleAuthProvider, signInWithPopup } from "firebase/auth"
 import { useRouter } from "next/navigation"
+import { Resister } from "@/lib/api/auth"
+import Cookies from "js-cookie"
 
 export default function SignInPage() {
   const [showPassword, setShowPassword] = useState(false)
   const [isSigningIn, setIsSigningIn] = useState(false)
+  const oneHourLater = new Date(new Date().getTime() + 1 * 60 * 60 * 1000);
 
   const handleGoogleLogin = async (): Promise<boolean> => {
     if (isSigningIn) return false
@@ -28,17 +31,33 @@ export default function SignInPage() {
     const provider = new GoogleAuthProvider()
 
     try {
-    const result = await signInWithPopup(auth, provider)
-    const user = result.user
-    console.log("ログイン成功:", user)
-    return true
-  } catch (error) {
-    console.error("ログイン失敗:", error)
-    return false
-  } finally {
-    setIsSigningIn(false)
+      const result = await signInWithPopup(auth, provider)
+      const user = result.user
+      const token = await user.getIdToken()
+
+      Cookies.set("token", token, {
+        // トークンの有効期限はまた話し合って決めたい
+        expires: oneHourLater,
+        secure: true,
+        sameSite: "none",
+      })
+
+      const userObject = {
+        email: user.email || "",
+        userName: user.displayName || "",
+        userId: user.uid || "",
+      }
+
+      // await Resister(userObject)
+      console.log("ログイン成功:", user)
+      return true
+    } catch (error) {
+      console.error("ログイン失敗:", error)
+      return false
+    } finally {
+      setIsSigningIn(false)
+    }
   }
-}
 
   const Router = useRouter()
 
@@ -46,12 +65,12 @@ export default function SignInPage() {
     Router.push("/")
   }
 
- const handleFirstRouting = async () => {
-  const success = await handleGoogleLogin()
-  if (success) {
-    handleRoutingHome()
+  const handleFirstRouting = async () => {
+    const success = await handleGoogleLogin()
+    if (success) {
+      handleRoutingHome()
+    }
   }
-}
 
   return (
     <div className="min-h-screen bg-black text-white flex flex-col">
@@ -64,7 +83,7 @@ export default function SignInPage() {
           <CardContent className="space-y-4">
             <div className="space-y-2">
               <Label htmlFor="email" className="text-zinc-300">
-                メールアドレス
+                メールアドレス（開発予定）
               </Label>
               <Input
                 id="email"
@@ -76,9 +95,9 @@ export default function SignInPage() {
             <div className="space-y-2">
               <div className="flex items-center justify-between">
                 <Label htmlFor="password" className="text-zinc-300">
-                  パスワード
+                  パスワード（開発予定）
                 </Label>
-                <Link href="#" className="text-xs text-zinc-400 hover:text-white">
+                <Link href="#" onClick={() => alert("パスワードの再設定機能は開発中です。")} className="text-xs text-zinc-400 hover:text-white">
                   パスワードをお忘れですか？
                 </Link>
               </div>
@@ -99,7 +118,12 @@ export default function SignInPage() {
               </div>
               <div className="text-xs text-zinc-500 font-mono">※ セキュリティのため8文字以上</div>
             </div>
-            <Button className="w-full bg-white text-black hover:bg-zinc-200">ログイン</Button>
+            <Button
+              className="w-full bg-white text-black hover:bg-zinc-200"
+              onClick={() => alert("ログイン機能は開発中です。")}
+            >
+              ログイン（開発予定）
+            </Button>
             <div className="relative">
               <div className="absolute inset-0 flex items-center">
                 <span className="w-full border-t border-zinc-700" />
@@ -110,7 +134,7 @@ export default function SignInPage() {
             </div>
             <Button
               variant="outline"
-              className="w-full border-zinc-700 text-white hover:bg-zinc-800 hover:text-white"
+              className="w-full border-zinc-700 hover:text-white dark:text-black hover:bg-zinc-800 dark:bg-white dark:hover:text-white"
               onClick={handleFirstRouting}
               disabled={isSigningIn}
             >
@@ -120,7 +144,7 @@ export default function SignInPage() {
           <CardFooter className="flex flex-col space-y-4 pt-0">
             <div className="text-center text-sm text-zinc-400">
               アカウントをお持ちでないですか？{" "}
-              <Link href="#" className="text-white hover:underline">
+              <Link href="#" onClick={() => alert("新規登録機能は開発中です。")} className="text-white hover:underline">
                 新規登録
               </Link>
             </div>

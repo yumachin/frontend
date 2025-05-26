@@ -1,32 +1,61 @@
-import Link from "next/link"
-import { Button } from "@/components/ui/button"
-import { Baby, Skull, Smile, } from "lucide-react"
+"use client"
 
-export default function Level() {
+import { Baby , Crown, Skull, Smile} from "lucide-react"
+
+type LevelType = "easy" | "normal" | "hard" | "all"
+
+interface LevelProps {
+    selectedLevel: LevelType
+    onLevelChange: (level: LevelType) => void
+}
+
+export default function Level({ selectedLevel, onLevelChange }: LevelProps) {
     const navItems = [
-        { label: "初級", icon: <Baby className="h-10 w-10 p-0" />, href: "/" },
-        { label: "中級", icon: <Smile className="h-10 w-10" />, href: "/ranking" },
-        { label: "上級", icon: <Skull className="h-10 w-10" />, href: "/profile" },
-    ]
+        {
+            value: "easy",
+            label: "初級",
+            icon: <Baby className="w-6 h-6" />,
+        },
+        {
+            value: "normal",
+            label: "中級",
+            icon: <Smile className="w-6 h-6" />,
+        },
+        {
+            value: "hard",
+            label: "上級",
+            icon: <Skull className="w-6 h-6" />,
+        },
+        {
+            value: "all",
+            label: "総合(開発中)",
+            icon: <Crown className="w-6 h-6" />,
+        },
+    ] as const
 
     return (
-        <footer className="text-center">
-            {/* ナビゲーションボタン */}
-            <nav className="flex flex-1 justify-between">
-                {navItems.map((item) => (
-                    <Link key={item.href} href={item.href} passHref>
-                        <div className="flex flex-col items-center w-full">
-                            <Button
-                                asChild
-                                variant="ghost"
-                                className="w-full justify-center"
+        <footer className="py-4 border-t">
+            <nav className="flex justify-around">
+                {navItems.map((item) => {
+                    const isSelected = selectedLevel === item.value;
+                    return (
+                        <button
+                            key={item.value}
+                            onClick={() => onLevelChange(item.value as "easy" | "normal" | "hard")}
+                            className={`flex flex-col items-center space-y-1 text-sm transition-colors ${isSelected ? "text-orange-500 font-bold" : "text-muted-foreground"
+                                }`}
+                        >
+                            <div
+                                className={`p-3 rounded-full transition-colors ${isSelected ? "bg-orange-300 text-white" : "bg-muted hover:bg-accent"
+                                    }`}
                             >
                                 {item.icon}
-                            </Button>
-                            <span className="text-xs tracking-tight pb-2">{item.label}</span>
-                        </div>
-                    </Link>
-                ))}
+                            </div>
+                            <span>{item.label}</span>
+                        </button>
+
+                    )
+                })}
             </nav>
         </footer>
     )

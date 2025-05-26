@@ -1,36 +1,47 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Tech Arena - クイズバトルアプリ
 
-## Getting Started
+Tech Arenaは、プログラミングやITに関する知識を活かして、リアルタイムに他のユーザーとバトルできる対戦型クイズアプリです。
 
-First, run the development server:
+![screenshot](./public/README-photo.png) 
+
+## 🚀 特徴
+
+- リアルタイム対戦型クイズモード（現在シングルプレイ対応、マルチプレイは開発中）
+- ダーク／ライトテーマ対応
+- コードハイライト表示（React / JSX）
+- `next-themes`によるテーマ切り替え対応
+- Tailwind CSS によるレスポンシブな美しいUI
+
+## 🔧 使用技術
+
+- [Next.js 15+](https://nextjs.org/)
+- [TypeScript](https://www.typescriptlang.org/)
+- [Tailwind CSS](https://tailwindcss.com/)
+- [react-syntax-highlighter](https://github.com/react-syntax-highlighter/react-syntax-highlighter)
+- [next-themes](https://github.com/pacocoursey/next-themes)
+
+## ▶️ 開発環境での起動方法
 
 ```bash
+# 依存関係のインストール
+npm install
+
+# 開発サーバーの起動
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+
+# http://localhost:3000 にアクセス
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## 🌗 テーマについて
+next-themes を使用しており、システムのダーク／ライトモードに自動で追従します。
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+コードハイライトは、テーマに応じて vscDarkPlus または oneLight が適用されます。
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## ✨ 今後の展望
+マルチプレイヤーモードの実装
 
-## Learn More
+問題カテゴリの追加（JavaScript, Python, インフラ など）
 
-To learn more about Next.js, take a look at the following resources:
+フレンド機能
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+問題投稿機能

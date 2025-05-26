@@ -1,9 +1,17 @@
+"use client"
+
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import Footer from "@/components/footer"
 import { Progress } from "@/components/ui/progress"
-interface StatsProps {
+import { Button } from "@/components/ui/button"
+import { useMemo } from "react"
+import { useUser } from "@/context/UserContext"
+import Cookies from "js-cookie"
+import { useRouter } from "next/navigation"
+
+type StatsProps = {
   difficulty: string;
   clearNum: number;
   correctNum: number;
@@ -28,27 +36,50 @@ const DifficultyProgress = ({ difficulty, clearNum, correctNum }: StatsProps) =>
   );
 };
 
+const user = {
+  userId: "5vcsdvasjhviaer",
+  email: "e1922047@oit.ac.jp",
+  userName: "中井裕麻",
+  iconPath: "default.png",
+  role: "user" as "user",
+  stats: {
+    hardClearNum: 3,
+    normalClearNum: 13,
+    easyClearNum: 10,
+    hardCorrectNum: 2,
+    normalCorrectNum: 5,
+    easyCorrectNum: 7
+  },
+  createdAt: "2025-05-24T08:53:18.000Z",
+  updatedAt: "2025-05-24T08:53:18.000Z"
+}
+
 export default function ProfilePage() {
-  const user = {
-    userId: "5",
-    email: "e1922047@oit.ac.jp",
-    userName: "中井裕麻",
-    iconPath: "/images/user.png",
-    role: "user",
-    stats: {
-      hardClearNum: 3,
-      normalClearNum: 13,
-      easyClearNum: 10,
-      hardCorrectNum: 2,
-      normalCorrectNum: 5,
-      easyCorrectNum: 7
-    },
-    createdAt: "2024-01-01T00:00:00Z",
-    updatedAt: "2024-01-01T00:00:00Z"
+  const { setUser } = useUser();
+  // const { user, setUser } = useUser();
+  const router = useRouter();
+
+  if (!user) {
+    return <div className="text-center text-red-500 mt-30">プロフィールの取得に失敗しました。</div>;
   }
 
-  const solvedCount = user.stats.hardClearNum + user.stats.normalClearNum + user.stats.easyClearNum
-  const correctCount = user.stats.hardCorrectNum + user.stats.normalCorrectNum + user.stats.easyCorrectNum
+  const solvedCount = useMemo(() => (
+    user.stats.hardClearNum + user.stats.normalClearNum + user.stats.easyClearNum
+  ), [user]);
+
+const correctCount = useMemo(() => (
+  user.stats.hardCorrectNum + user.stats.normalCorrectNum + user.stats.easyCorrectNum
+), [user]);
+
+  const handleEdit = () => {
+    alert("この機能は開発中です。");
+  }
+
+  const handleLogout = () => {
+    Cookies.remove("token", { path: "/" });
+    setUser(null);
+    router.push("/signIn");
+  }
 
   return (
     <div className="flex flex-col items-center">
@@ -63,12 +94,19 @@ export default function ProfilePage() {
           <TabsContent value="overview" className="space-y-12">
             <div className="grid gap-4 lg:grid-cols-4">
               <Card className="col-span-2">
-                <CardHeader>
+                <CardHeader className="flex items-center justify-between">
                   <CardTitle>プロフィール</CardTitle>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={handleEdit}
+                  >
+                    編集（開発中）
+                  </Button>
                 </CardHeader>
                 <CardContent className="flex items-center gap-8">
                   <Avatar className="h-24 w-24">
-                    <AvatarImage src={user.iconPath} alt={user.userName} />
+                    <AvatarImage src={`${process.env.NEXT_PUBLIC_API_URL}/${user.iconPath}`} alt={user.userName} />
                     <AvatarFallback>{user.userName.charAt(0)}</AvatarFallback>
                   </Avatar>
                   <div>
@@ -103,17 +141,17 @@ export default function ProfilePage() {
               </CardHeader>
               <CardContent className="grid gap-6 lg:gap-12">
                 <DifficultyProgress 
-                  difficulty="易" 
+                  difficulty="初級" 
                   clearNum={user.stats.easyClearNum} 
                   correctNum={user.stats.easyCorrectNum} 
                 />
                 <DifficultyProgress 
-                  difficulty="中" 
+                  difficulty="中級" 
                   clearNum={user.stats.normalClearNum} 
                   correctNum={user.stats.normalCorrectNum} 
                 />
                 <DifficultyProgress 
-                  difficulty="難" 
+                  difficulty="上級" 
                   clearNum={user.stats.hardClearNum} 
                   correctNum={user.stats.hardCorrectNum} 
                 />
@@ -122,42 +160,17 @@ export default function ProfilePage() {
           </TabsContent>
 
           <TabsContent value="settings">
-            {/* <Card>
-              <CardHeader>
-                <CardTitle>Account Settings</CardTitle>
-                <CardDescription>Manage your account settings and preferences</CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="space-y-2">
-                  <h3 className="font-medium">Profile Information</h3>
-                  <p className="text-sm text-muted-foreground">
-                    Update your profile information and how others see you on the platform
-                  </p>
-                  <Button variant="outline">Edit Profile</Button>
-                </div>
-
-                <div className="space-y-2">
-                  <h3 className="font-medium">Email Notifications</h3>
-                  <p className="text-sm text-muted-foreground">Manage your email notification preferences</p>
-                  <Button variant="outline">Notification Settings</Button>
-                </div>
-
-                <div className="space-y-2">
-                  <h3 className="font-medium">Account Security</h3>
-                  <p className="text-sm text-muted-foreground">Update your password and security settings</p>
-                  <Button variant="outline">Security Settings</Button>
-                </div>
-
-                <div className="space-y-2">
-                  <h3 className="font-medium">Connected Accounts</h3>
-                  <p className="text-sm text-muted-foreground">Connect your account with GitHub or Google</p>
-                  <div className="flex gap-2">
-                    <Button variant="outline">Connect GitHub</Button>
-                    <Button variant="outline">Connect Google</Button>
-                  </div>
-                </div>
-              </CardContent>
-            </Card> */}
+            <div className="space-y-4">
+              <h2 className="text-lg font-bold">設定</h2>
+              <p className="text-sm text-muted-foreground">この機能は開発中です。</p>
+              <Button 
+                variant="outline" 
+                className="w-full bg-red-500 dark:bg-red-500 text-white hover:text-white hover:bg-red-600 dark:hover:bg-red-600"
+                onClick={handleLogout}
+              >
+                ログアウト
+              </Button>
+            </div>
           </TabsContent>
         </Tabs>
       </div>
