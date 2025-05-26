@@ -7,11 +7,13 @@ import { QuestionType } from "@/types/type"
 import { useRouter } from "next/navigation"
 import { PostIfCorrect } from "@/lib/api/question"
 import { useUser } from "@/context/UserContext"
+import Cookies from "js-cookie"
 
 export default function HardQuizClient({ question }: { question: QuestionType }) {
   const { user } = useUser()
   const router = useRouter()
   const [selectedAnswer, setSelectedAnswer] = useState<string | null>(null)
+  const token = Cookies.get("token")
 
   const handleSelectAnswer = (answer: string) => {
     setSelectedAnswer(answer)
@@ -23,9 +25,9 @@ export default function HardQuizClient({ question }: { question: QuestionType })
         return <div className="text-center text-red-500 mt-30">プロフィールの取得に失敗しました。</div>;
       }
 
-      const res = await PostIfCorrect(user.userId, "easy", selectedAnswer === question.answer)
+      const res = await PostIfCorrect(user.userId, "easy", selectedAnswer === question.answer, token)
       if (res.message) {
-        // router.push(`/result?questionId=${question.id}&selectedAnswer=${selectedAnswer}`)
+        router.push(`/answer/${question.questionId}?level=hard&selectedAnswer=${selectedAnswer}`)
       } else {
         throw new Error("API error")
       }
@@ -45,28 +47,33 @@ export default function HardQuizClient({ question }: { question: QuestionType })
 
       {/* 選択肢エリア */}
       <div className="p-4 grid gap-4">
-        {["A", "B", "C", "D"].map((option, index) => (
-          <motion.button
-            key={option}
-            onClick={() => handleSelectAnswer(option)}
-            className={`relative flex items-center p-4 rounded-xl border-1 transition-all ${
-              selectedAnswer === option
-                ? "border-orange-500 bg-orange-50 dark:text-black"
-                : "hover:border-gray-300 light:bg-gray-500"
-            }`}
-            whileTap={{ scale: 0.98 }}
-          >
-            <div
-              className={`flex items-center justify-center h-6 w-6 lg:h-10 lg:w-10 rounded-full mr-4 text-md lg:text-lg font-medium ${
-                selectedAnswer === option ? "bg-orange-500 text-white" : "bg-gray-100 text-gray-700"
+        {["A", "B", "C", "D"].map((alph, index) => {
+          const optionKey = `option${index+1}` as "option1" | "option2" | "option3" | "option4";;
+          const option = question[optionKey];
+
+          return (
+            <motion.button
+              key={index}
+              onClick={() => handleSelectAnswer(alph)}
+              className={`relative flex items-center p-4 rounded-xl border-1 transition-all ${
+                selectedAnswer === alph
+                  ? "border-orange-500 bg-orange-50 dark:text-black"
+                  : "hover:border-gray-300 light:bg-gray-500"
               }`}
+              whileTap={{ scale: 0.98 }}
             >
-              {option}
-            </div>
-            <span className="text-xs lg:text-lg">{question.choices[index].text}</span>
-            {selectedAnswer === option && <CheckCircle className="absolute right-4 text-orange-500 h-6 w-6" />}
-          </motion.button>
-        ))}
+              <div
+                className={`flex items-center justify-center h-6 w-6 lg:h-10 lg:w-10 rounded-full mr-4 text-md lg:text-lg font-medium ${
+                  selectedAnswer === alph ? "bg-orange-500 text-white" : "bg-gray-100 text-gray-700"
+                }`}
+              >
+                {index+1}
+              </div>
+              <span className="text-xs lg:text-lg">{option}</span>
+              {selectedAnswer === alph && <CheckCircle className="absolute right-4 text-orange-500 h-6 w-6" />}
+            </motion.button>
+          )
+        })}
       </div>
 
       {/* フッター部分 */}

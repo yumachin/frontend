@@ -3,24 +3,8 @@ import NormalQuizClient from "./NormalQuizClient"
 import { QuestionType } from "@/types/type";
 import { cookies } from "next/headers";
 
-const question: QuestionType[] = [
-  {
-    questionId: 54,
-    question: "OSI参照モデルにおけるセッション層の役割は？",
-    choices: [
-      {key: "A", text: "パケットの経路選択"},
-      {key: "B", text: "データの暗号化"},
-      {key: "C", text: "通信の開始と終了の管理"},
-      {key: "D", text: "エラー検出と訂正"},
-    ],
-    answer: "C",
-    explanation: "OSI参照モデルのセッション層は、通信の開始と終了を管理し、セッションの確立、維持、終了を行います。これにより、アプリケーション間の通信が円滑に行われるようになります。",
-  },
-]
-
 export default async function NormalQuizPage({ params }: { params: {id: string } }) {
   const { id } = await params;
-
   const cookieStore = await cookies()
   const token = cookieStore.get("token")?.value
 
@@ -28,20 +12,11 @@ export default async function NormalQuizPage({ params }: { params: {id: string }
     return <div className="text-center text-red-500 mt-30">ログインが必要です。</div>
   }
 
-  // const question: QuestionType[] = await GetQuestion("easy", id, token)
-  console.log("question", question)
+  const question: QuestionType[] = await GetQuestion("easy", id, token)
 
   if (!question) {
     return <div>問題が見つかりません</div>
   }
-
-  // const router = useRouter()
-  // const handleNext = () => {
-  //   router.push(`/quiz/hard/${id + 1}`)
-  // }
-  // const handleBack = () => {
-  //   router.push('/')
-  // }
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center px-8 lg:px-0">

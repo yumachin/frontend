@@ -7,7 +7,7 @@ import { CircleCheck, XCircle } from "lucide-react"
 import { useRouter } from "next/navigation"
 
 export default function QuizInterface() {
-  const [answered, setAnswered] = useState<boolean | null>(true) // 仮に正解としてセット
+  const [answered, setAnswered] = useState<boolean | null>(true)
   const [showExplanation, setShowExplanation] = useState(false)
 
   const explanationText = "渡された解説を表示するセクション。以下例文....プログラミングとは、コンピュータに対して具体的な指示を与えるための作業であり、問題を解決するための手順やアルゴリズムをコードとして記述することを指します。プログラミング言語はこの指示を書くためのツールで、JavaScriptやPython、C++など様々な種類があります。それぞれの言語には得意分野や特徴があり、用途に応じて使い分けられます。プログラミングの基本は、論理的思考力を用いて問題を細かく分解し、解決手順を設計することです。また、プログラムは一度書いて終わりではなく、バグの修正や機能追加などメンテナンスも重要な工程です。最近では、オブジェクト指向や関数型プログラミングなど、多様なパラダイムがあり、それらを理解し使いこなすことで効率的なコードを書くことが可能になります。プログラミングは単なる技術ではなく、創造的な作業であり、ソフトウェア開発やデータ解析、ゲーム制作など多くの分野で不可欠なスキルとなっています。"

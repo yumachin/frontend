@@ -28,7 +28,7 @@ export default function EasyQuizClient({ question } : { question: QuestionType }
       const res = await PostIfCorrect(user.userId, "easy", selectedAnswer === question.answer, token)
       
       if (res.message) {
-        // router.push(`/result?questionId=${question.id}&selectedAnswer=${selectedAnswer}`)
+        router.push(`/answer/${question.questionId}?level=easy&selectedAnswer=${selectedAnswer}`)
       } else {
         throw new Error("API error")
       }
