@@ -12,7 +12,7 @@ export default async function NormalQuizPage({ params }: { params: {id: string }
     return <div className="text-center text-red-500 mt-30">ログインが必要です。</div>
   }
 
-  const question: QuestionType[] = await GetQuestion("easy", id, token)
+  const question: QuestionType = await GetQuestion("normal", id, token)
 
   if (!question) {
     return <div>問題が見つかりません</div>
@@ -31,7 +31,7 @@ export default async function NormalQuizPage({ params }: { params: {id: string }
               <span className="ml-1 lg:ml-2">問目</span>
             </div>
           </div>
-          <NormalQuizClient question={question[0]} />
+          <NormalQuizClient question={question} />
         </div>
       </div>
     </div>
