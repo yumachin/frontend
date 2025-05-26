@@ -1,35 +1,18 @@
 "use client"
 
 import { GetProfile } from "@/lib/api/user"
-import { createContext, useContext, useState, ReactNode, useEffect } from "react"
-
-type User = {
-  userId: string,
-  email: string,
-  userName: string,
-  iconPath: string,
-  role: "user" | "admin",
-  stats: {
-    hardClearNum: number,
-    normalClearNum: number,
-    easyClearNum: number,
-    hardCorrectNum: number,
-    normalCorrectNum: number,
-    easyCorrectNum: number
-  },
-  createdAt: string,
-  updatedAt: string
-} | null
+import { UserType } from "@/types/type"
+import { createContext, useContext, useState, ReactNode, useEffect, useMemo } from "react"
 
 type UserContextType = {
-  user: User
-  setUser: (user: User) => void
+  user: UserType
+  setUser: (user: UserType) => void
 }
 
 const UserContext = createContext<UserContextType | undefined>(undefined)
 
 export const UserProvider = ({ children }: { children: ReactNode }) => {
-  const [user, setUser] = useState<User>(null)
+  const [user, setUser] = useState<UserType>(null)
 
   // useEffect(() => {
   //   const fetchUser = async () => {
@@ -45,8 +28,10 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
   //   fetchUser();
   // }, []);
 
+  const contextValue = useMemo(() => ({ user, setUser }), [user])
+
   return (
-    <UserContext.Provider value={{ user, setUser }}>
+    <UserContext.Provider value={contextValue}>
       {children}
     </UserContext.Provider>
   )

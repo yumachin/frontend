@@ -1,20 +1,8 @@
 import { GetQuestion } from "@/lib/api/question"
 import HardQuizClient from "./HardQuizClient"
+import { QuestionType } from "@/types/type";
 
-type Question = {
-  questionId: number
-  question: string
-  choices: Choice[]
-  answer: string
-  explanation: string
-}
-
-type Choice = {
-  key: string
-  text: string
-}
-
-const question: Question[] = [
+const question: QuestionType[] = [
   {
     questionId: 54,
     question: "OSI参照モデルにおけるセッション層の役割は？",
@@ -31,7 +19,7 @@ const question: Question[] = [
 
 export default async function HardQuizPage({ params }: { params: {id: string } }) {
   const { id } = await params;
-  // const question: Question[] = await GetQuestion("hard", id)
+  // const question: QuestionType[] = await GetQuestion("easy", id)
   console.log("question", question)
 
   if (!question) {
@@ -50,7 +38,6 @@ export default async function HardQuizPage({ params }: { params: {id: string } }
     <div className="min-h-screen flex flex-col items-center justify-center px-8 lg:px-0">
       <div className="w-full max-w-4xl">
         <div className="pt-6 rounded-2xl border-2 lg:border-3">
-          {/* ヘッダー部分 */}
           <div className="relative">
             <div className="absolute left-4 font-semibold rounded-full h-12 w-12 lg:h-14 lg:w-14 flex items-center justify-center text-md lg:text-xl border-2 lg:border-3">
               上

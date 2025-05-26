@@ -3,29 +3,39 @@
 import { useState } from "react"
 import { motion } from "framer-motion"
 import { CheckCircle } from "lucide-react"
+import { QuestionType } from "@/types/type"
+import { useRouter } from "next/navigation"
+import { PostIfCorrect } from "@/lib/api/question"
+import { useUser } from "@/context/UserContext"
 
-type Question = {
-  questionId: number
-  question: string
-  choices: Choice[]
-  answer: string
-  explanation: string
-}
-
-type Choice = {
-  key: string
-  text: string
-}
-
-export default function HardQuizClient({ question }: { question: Question }) {
+export default function HardQuizClient({ question }: { question: QuestionType }) {
+  const { user } = useUser()
+  const router = useRouter()
   const [selectedAnswer, setSelectedAnswer] = useState<string | null>(null)
 
   const handleSelectAnswer = (answer: string) => {
     setSelectedAnswer(answer)
   }
 
+  const handleAnswer = async () => {
+    try {
+      if (!user) {
+        return <div className="text-center text-red-500 mt-30">プロフィールの取得に失敗しました。</div>;
+      }
+
+      const res = await PostIfCorrect(user.userId, "easy", selectedAnswer === question.answer)
+      if (res.message) {
+        // router.push(`/result?questionId=${question.id}&selectedAnswer=${selectedAnswer}`)
+      } else {
+        throw new Error("API error")
+      }
+    } catch (error) {
+      console.error("Error submitting answer:", error)
+    }
+  }
+
   return (
-    <div>
+    <>
       {/* 問題文エリア */}
       <div className="px-6 py-4 lg:p-8 border-b">
         <p className="text-sm md:text-xl leading-relaxed">
@@ -68,10 +78,11 @@ export default function HardQuizClient({ question }: { question: Question }) {
               : "bg-gray-200 text-gray-400 cursor-not-allowed"
           }`}
           disabled={!selectedAnswer}
+          onClick={handleAnswer}
         >
           回答
         </button>
       </div>
-    </div>
+    </>
   )
 }

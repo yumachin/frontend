@@ -6,7 +6,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import Footer from "@/components/footer"
 import { Progress } from "@/components/ui/progress"
 import { Button } from "@/components/ui/button"
-import { useState } from "react"
+import { useMemo } from "react"
 import { useUser } from "@/context/UserContext"
 import Cookies from "js-cookie"
 import { useRouter } from "next/navigation"
@@ -36,34 +36,42 @@ const DifficultyProgress = ({ difficulty, clearNum, correctNum }: StatsProps) =>
   );
 };
 
+const user = {
+  userId: "5vcsdvasjhviaer",
+  email: "e1922047@oit.ac.jp",
+  userName: "中井裕麻",
+  iconPath: "default.png",
+  role: "user" as "user",
+  stats: {
+    hardClearNum: 3,
+    normalClearNum: 13,
+    easyClearNum: 10,
+    hardCorrectNum: 2,
+    normalCorrectNum: 5,
+    easyCorrectNum: 7
+  },
+  createdAt: "2025-05-24T08:53:18.000Z",
+  updatedAt: "2025-05-24T08:53:18.000Z"
+}
+
 export default function ProfilePage() {
-  const [isEditing, setIsEditing] = useState(false);
   const { setUser } = useUser();
+  // const { user, setUser } = useUser();
   const router = useRouter();
 
-  const user = {
-    userId: "5vcsdvasjhviaer",
-    email: "e1922047@oit.ac.jp",
-    userName: "中井裕麻",
-    iconPath: "default.png",
-    role: "user",
-    stats: {
-      hardClearNum: 3,
-      normalClearNum: 13,
-      easyClearNum: 10,
-      hardCorrectNum: 2,
-      normalCorrectNum: 5,
-      easyCorrectNum: 7
-    },
-    createdAt: "2025-05-24T08:53:18.000Z",
-    updatedAt: "2025-05-24T08:53:18.000Z"
+  if (!user) {
+    return <div className="text-center text-red-500 mt-30">プロフィールの取得に失敗しました。</div>;
   }
 
-  const solvedCount = user.stats.hardClearNum + user.stats.normalClearNum + user.stats.easyClearNum
-  const correctCount = user.stats.hardCorrectNum + user.stats.normalCorrectNum + user.stats.easyCorrectNum
+  const solvedCount = useMemo(() => (
+    user.stats.hardClearNum + user.stats.normalClearNum + user.stats.easyClearNum
+  ), [user]);
+
+const correctCount = useMemo(() => (
+  user.stats.hardCorrectNum + user.stats.normalCorrectNum + user.stats.easyCorrectNum
+), [user]);
 
   const handleEdit = () => {
-    setIsEditing(prev => !prev);
     alert("この機能は開発中です。");
   }
 
@@ -93,7 +101,7 @@ export default function ProfilePage() {
                     size="sm"
                     onClick={handleEdit}
                   >
-                    {isEditing ? "保存(開発中)" : "編集（開発中）"}
+                    編集（開発中）
                   </Button>
                 </CardHeader>
                 <CardContent className="flex items-center gap-8">
