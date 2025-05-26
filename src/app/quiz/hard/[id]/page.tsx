@@ -12,7 +12,7 @@ export default async function HardQuizPage({ params }: { params: {id: string } }
     return <div className="text-center text-red-500 mt-30">ログインが必要です。</div>
   }
 
-  const question: QuestionType = await GetQuestion("easy", id, token)
+  const question: QuestionType = await GetQuestion("hard", id, token)
 
   if (!question) {
     return <div>問題が見つかりません</div>
