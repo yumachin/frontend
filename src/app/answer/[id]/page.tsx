@@ -4,7 +4,7 @@ import { use, useEffect, useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import { CircleCheck, XCircle } from "lucide-react"
-import { useRouter } from "next/navigation"
+import { useRouter, useSearchParams } from "next/navigation"
 import { GetQuestion } from "@/lib/api/question"
 import { QuestionType } from "@/types/type"
 import Cookies from "js-cookie"
@@ -23,6 +23,9 @@ export default function QuizInterface({ params }: { params: Promise<{ id: string
   const unwrapParams = use(params);
   const Router = useRouter()
   const token = Cookies.get("token")
+  const searchParams = useSearchParams()
+  const level = searchParams.get("level")
+  const selectedAnswer = searchParams.get("selectedAnswer")
   
   const handleRoutingHome = () => {
     Router.push("/")
@@ -40,14 +43,25 @@ export default function QuizInterface({ params }: { params: Promise<{ id: string
     fetchQuestion()
   }, [])
   
+  useEffect(() => {
+    if (!question) return;
+    if (selectedAnswer) {
+      setAnswered(selectedAnswer === question.answer);
+    } else {
+      setAnswered(null);  // 未回答時など
+    }
+  }, [selectedAnswer, question]);
+
   
   if (!question){
     return
   }
   
   const handleNext = () => {
-    Router.push(`/quiz/hard/${question.questionId + 1}`)
+    Router.push(`/quiz/${level}/${question.questionId + 1}`)
   }
+
+  console.log("answeredの値は", answered)
 
   return (
     <div className="flex justify-center items-center  dark:bg-stone-800 py-8 lg:py-20 px-4 min-h-screen">
