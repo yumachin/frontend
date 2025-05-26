@@ -1,7 +1,4 @@
-import Cookies from "js-cookie";
-
-export const GetQuestion = async (mode: string, id: string) => {
-  const token = Cookies.get("token");
+export const GetQuestion = async (mode: string, id: string, token: string) => {
   if (!token) {
     throw new Error("Token not found in cookies");
   }
@@ -18,8 +15,7 @@ export const GetQuestion = async (mode: string, id: string) => {
   return data;
 }
 
-export const PostIfCorrect = async (userId: string, questionLevel: string, isCorrect: boolean) => {
-  const token = Cookies.get("token");
+export const PostIfCorrect = async (userId: string, questionLevel: string, isCorrect: boolean, token: string | undefined) => {
   if (!token) {
     throw new Error("Token not found in cookies");
   }

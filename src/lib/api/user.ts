@@ -1,12 +1,5 @@
-import Cookies from "js-cookie";
-
-export const GetProfile = async () => {
-  const token = Cookies.get("token");
-  if (!token) {
-    throw new Error("Token not found in cookies");
-  }
-
-  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/users/me`, {
+export const GetProfile = async (userId: string, token: string) => {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/users/${userId}`, {
     cache: "no-store",
     headers: {
       "Authorization": `Bearer ${token}`
