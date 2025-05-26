@@ -1,5 +1,3 @@
-import Cookies from "js-cookie";
-
 type ResisterProps = {
   email: string;
   userName: string;

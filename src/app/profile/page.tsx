@@ -36,40 +36,30 @@ const DifficultyProgress = ({ difficulty, clearNum, correctNum }: StatsProps) =>
   );
 };
 
-const user = {
-  userId: "5vcsdvasjhviaer",
-  email: "e1922047@oit.ac.jp",
-  userName: "中井裕麻",
-  iconPath: "default.png",
-  role: "user" as "user",
-  stats: {
-    hardClearNum: 3,
-    normalClearNum: 13,
-    easyClearNum: 10,
-    hardCorrectNum: 2,
-    normalCorrectNum: 5,
-    easyCorrectNum: 7
-  },
-  createdAt: "2025-05-24T08:53:18.000Z",
-  updatedAt: "2025-05-24T08:53:18.000Z"
-}
-
 export default function ProfilePage() {
-  const { setUser } = useUser();
-  // const { user, setUser } = useUser();
+  const { user, setUser } = useUser();
   const router = useRouter();
 
-  if (!user) {
-    return <div className="text-center text-red-500 mt-30">プロフィールの取得に失敗しました。</div>;
-  }
-
   const solvedCount = useMemo(() => (
-    user.stats.hardClearNum + user.stats.normalClearNum + user.stats.easyClearNum
+    user?.stats
+      ? user.stats.hardClearNum + user.stats.normalClearNum + user.stats.easyClearNum
+      : 0
   ), [user]);
 
-const correctCount = useMemo(() => (
-  user.stats.hardCorrectNum + user.stats.normalCorrectNum + user.stats.easyCorrectNum
-), [user]);
+  const correctCount = useMemo(() => (
+    user?.stats
+      ? user.stats.hardCorrectNum + user.stats.normalCorrectNum + user.stats.easyCorrectNum
+      : 0
+  ), [user]);
+
+  if (!user) {
+    return (
+      <div className="flex flex-col justify-center items-center min-h-screen text-gray-500 dark:text-gray-300">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-4 border-b-4 border-orange-500 mb-4"></div>
+        <p className="text-xl font-semibold tracking-wide">Loading Arena...</p>
+      </div>
+    )
+  }
 
   const handleEdit = () => {
     alert("この機能は開発中です。");
@@ -77,6 +67,7 @@ const correctCount = useMemo(() => (
 
   const handleLogout = () => {
     Cookies.remove("token", { path: "/" });
+    Cookies.remove("userId", { path: "/" });
     setUser(null);
     router.push("/signIn");
   }
