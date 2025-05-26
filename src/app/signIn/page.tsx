@@ -83,7 +83,7 @@ export default function SignInPage() {
       <main className="flex-1 flex items-center justify-center p-4">
         <Card className="w-full max-w-md bg-zinc-900 border-zinc-800">
           <CardHeader className="space-y-1">
-            <CardTitle className="text-2xl font-bold text-center">ログイン</CardTitle>
+            <CardTitle className="text-2xl font-bold text-center text-white">ログイン</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="space-y-2">
@@ -139,7 +139,7 @@ export default function SignInPage() {
             </div>
             <Button
               variant="outline"
-              className="w-full border-zinc-700 hover:text-white dark:text-black hover:bg-zinc-800 dark:bg-white dark:hover:text-white"
+              className="w-full border-zinc-700 dark:text-black hover:bg-zinc-200 dark:bg-white dark:hover:bg-zinc-200"
               onClick={handleFirstRouting}
               disabled={isSigningIn}
             >
