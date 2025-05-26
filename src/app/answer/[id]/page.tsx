@@ -1,43 +1,70 @@
 "use client"
 
-import { useState } from "react"
+import { use, useEffect, useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import { CircleCheck, XCircle } from "lucide-react"
 import { useRouter } from "next/navigation"
+import { GetQuestion } from "@/lib/api/question"
+import { QuestionType } from "@/types/type"
 
-export default function QuizInterface() {
+// export type QuestionType = {
+//   questionid: number
+//   question: string
+//   answer: string
+//   explanation: string
+// }
+
+export default function QuizInterface({ params }: { params: Promise<{ id: string }> }) {
+  const [question, setQuestion] = useState<QuestionType | null>(null)
   const [answered, setAnswered] = useState<boolean | null>(true) // 仮に正解としてセット
   const [showExplanation, setShowExplanation] = useState(false)
-
-  const explanationText = "渡された解説を表示するセクション。以下例文....プログラミングとは、コンピュータに対して具体的な指示を与えるための作業であり、問題を解決するための手順やアルゴリズムをコードとして記述することを指します。プログラミング言語はこの指示を書くためのツールで、JavaScriptやPython、C++など様々な種類があります。それぞれの言語には得意分野や特徴があり、用途に応じて使い分けられます。プログラミングの基本は、論理的思考力を用いて問題を細かく分解し、解決手順を設計することです。また、プログラムは一度書いて終わりではなく、バグの修正や機能追加などメンテナンスも重要な工程です。最近では、オブジェクト指向や関数型プログラミングなど、多様なパラダイムがあり、それらを理解し使いこなすことで効率的なコードを書くことが可能になります。プログラミングは単なる技術ではなく、創造的な作業であり、ソフトウェア開発やデータ解析、ゲーム制作など多くの分野で不可欠なスキルとなっています。"
-
+  const unwrapParams = use(params);
   const Router = useRouter()
   
-    const handleRoutingHome = () => {
-      Router.push("/")
+  const handleRoutingHome = () => {
+    Router.push("/")
+  }
+
+  useEffect(() => {
+    const fetchQuestion = async () => {
+      const fetchedQuestion: QuestionType = await GetQuestion("easy", unwrapParams.id)
+      setQuestion(fetchedQuestion)
     }
+    fetchQuestion()
+  }, [])
+  
+  
+  if (!question){
+    return
+  }
+  
+  const handleNext = () => {
+    Router.push(`/quiz/hard/${question.questionId + 1}`)
+  }
 
   return (
-    <div className="flex justify-center items-center bg-stone-800 py-8 lg:py-20 px-4 min-h-screen">
-      <div className="w-full max-w-md">
-        <Card className="bg-black w-full p-6 flex flex-col items-center space-y-6 shadow-md">
+    <div className="flex justify-center items-center  dark:bg-stone-800 py-8 lg:py-20 px-4 min-h-screen">
+      <div className="mt-20 w-full max-w-md">
+        <Card className="bg-white dark:bg-black w-full p-6 flex flex-col items-center space-y-6 shadow-md rounded-2xl border-4 dark:border-1 border-gray-200 dark:border-gray-700">
           {/* タイトル・正誤アイコン */}
           <div className="text-center">
-            <h1 className="text-4xl font-bold mb-6 text-white dark:text-white">第〇問</h1>
+            <h1 className="text-4xl font-bold mb-6 text-black dark:text-white">第  {question.questionId}  問</h1>
             {answered === true && (
               <div className="flex flex-col items-center">
                 <CircleCheck className="w-20 h-20 text-green-500 mb-2" />
-                <h2 className="text-3xl font-semibold text-green-500">正解！</h2>
+                <h2 className="text-3xl font-semibold text-green-600 dark:text-green-400">正解！</h2>
               </div>
             )}
             {answered === false && (
               <div className="flex flex-col items-center">
                 <XCircle className="w-20 h-20 text-red-500 mb-2" />
-                <h2 className="text-3xl font-semibold text-red-500">不正解...</h2>
+                <h2 className="text-3xl font-semibold text-red-600 dark:text-red-400">不正解...</h2>
               </div>
             )}
+          
           </div>
+
 
 {/* _____DEMO button______________________________________________________________________________________________________ */}
 {/* 
@@ -55,8 +82,8 @@ export default function QuizInterface() {
 
           {/* 解説表示エリア */}
           {showExplanation && (
-            <div className="w-full bg-white rounded-lg p-4 text-gray-800 text-base">
-              {explanationText}
+            <div className="pl-6 w-full bg-gray-100 dark:bg-gray-800 rounded-xl p-4 text-black dark:text-white text-base">
+              {question.explanation}
               <div className="mt-4 flex justify-center">
                 <span
                 onClick={() => setShowExplanation(false)}
@@ -65,12 +92,14 @@ export default function QuizInterface() {
                             text-lg 
                             text-black
                             bg-gray-300
+                            dark:bg-white
                             font-medium
-                            mt-7
-                            px-5
-                            py-2
+                            mt-5
+                            px-3
+                            py-1
                             border-3
                             border-white
+                            dark:boder-black
                             rounded-xl
                             "
                 >
@@ -91,7 +120,8 @@ export default function QuizInterface() {
                         font-medium 
                         rounded-lg 
                         border-2 
-                        border-gray-800"
+                        border-gray-500
+                        "
               onClick={() => setShowExplanation(true)}
             >
               解説を見る
@@ -109,12 +139,14 @@ export default function QuizInterface() {
                       font-medium 
                       rounded-lg 
                       border-3 
-                      border-gray-800"
+                      border-gray-500
+                      "
             onClick={handleRoutingHome}
             >
               終了
               </Button>
               <Button
+              onClick={handleNext}
               variant="outline"
               className="col-span-2 
                         py-6 
@@ -123,12 +155,13 @@ export default function QuizInterface() {
                         font-medium 
                         rounded-lg 
                         border-3 
-                        border-gray-300"
+                        border-gray-500
+                        "
             >
               次の問題へ 
               </Button>
           </div>
-        </Card>
+        </Card> 
       </div>
     </div>
   )
