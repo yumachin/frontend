@@ -7,6 +7,7 @@ import { CircleCheck, XCircle } from "lucide-react"
 import { useRouter } from "next/navigation"
 import { GetQuestion } from "@/lib/api/question"
 import { QuestionType } from "@/types/type"
+import Cookies from "js-cookie"
 
 // export type QuestionType = {
 //   questionid: number
@@ -21,14 +22,19 @@ export default function QuizInterface({ params }: { params: Promise<{ id: string
   const [showExplanation, setShowExplanation] = useState(false)
   const unwrapParams = use(params);
   const Router = useRouter()
+  const token = Cookies.get("token")
   
   const handleRoutingHome = () => {
     Router.push("/")
   }
 
+  if (!token) {
+    return
+  }
+
   useEffect(() => {
     const fetchQuestion = async () => {
-      const fetchedQuestion: QuestionType = await GetQuestion("easy", unwrapParams.id)
+      const fetchedQuestion: QuestionType = await GetQuestion("easy", unwrapParams.id, token)
       setQuestion(fetchedQuestion)
     }
     fetchQuestion()
