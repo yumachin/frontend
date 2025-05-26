@@ -15,7 +15,7 @@ import { QuestionType } from "@/types/type"
 //   explanation: string
 // }
 
-export default function QuizInterface({ params }: { params: Promise<{ id: string }> }) {
+export default function QuizInterface({ params }: { params: Promise<{ id: string }> }){
   const [question, setQuestion] = useState<QuestionType | null>(null)
   const [answered, setAnswered] = useState<boolean | null>(true) // 仮に正解としてセット
   const [showExplanation, setShowExplanation] = useState(false)

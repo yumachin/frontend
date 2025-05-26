@@ -18,8 +18,12 @@ import { GoogleAuthProvider, signInWithPopup } from "firebase/auth"
 import { useRouter } from "next/navigation"
 import { Resister } from "@/lib/api/auth"
 import Cookies from "js-cookie"
+import { GetProfile } from "@/lib/api/user"
+import { useUser } from "@/context/UserContext"
 
 export default function SignInPage() {
+  const { setUser } = useUser()
+  const router = useRouter()
   const [showPassword, setShowPassword] = useState(false)
   const [isSigningIn, setIsSigningIn] = useState(false)
   const oneHourLater = new Date(new Date().getTime() + 1 * 60 * 60 * 1000);
@@ -41,6 +45,11 @@ export default function SignInPage() {
         secure: true,
         sameSite: "none",
       })
+      Cookies.set("userId", user.uid || "", {
+        expires: oneHourLater,
+        secure: true,
+        sameSite: "none",
+      })
 
       const userObject = {
         email: user.email || "",
@@ -48,7 +57,9 @@ export default function SignInPage() {
         userId: user.uid || "",
       }
 
-      // await Resister(userObject)
+      await Resister(userObject)
+      const profile = await GetProfile(user.uid, token)
+      setUser(profile)
       console.log("ログイン成功:", user)
       return true
     } catch (error) {
@@ -59,16 +70,10 @@ export default function SignInPage() {
     }
   }
 
-  const Router = useRouter()
-
-  const handleRoutingHome = () => {
-    Router.push("/")
-  }
-
   const handleFirstRouting = async () => {
     const success = await handleGoogleLogin()
     if (success) {
-      handleRoutingHome()
+      router.push("/")
     }
   }
 
@@ -78,7 +83,7 @@ export default function SignInPage() {
       <main className="flex-1 flex items-center justify-center p-4">
         <Card className="w-full max-w-md bg-zinc-900 border-zinc-800">
           <CardHeader className="space-y-1">
-            <CardTitle className="text-2xl font-bold text-center">ログイン</CardTitle>
+            <CardTitle className="text-2xl font-bold text-center text-white">ログイン</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="space-y-2">
@@ -134,7 +139,7 @@ export default function SignInPage() {
             </div>
             <Button
               variant="outline"
-              className="w-full border-zinc-700 hover:text-white dark:text-black hover:bg-zinc-800 dark:bg-white dark:hover:text-white"
+              className="w-full border-zinc-700 dark:text-black hover:bg-zinc-200 dark:bg-white dark:hover:bg-zinc-200"
               onClick={handleFirstRouting}
               disabled={isSigningIn}
             >
