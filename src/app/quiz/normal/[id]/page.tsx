@@ -1,6 +1,7 @@
 import { GetQuestion } from "@/lib/api/question"
 import NormalQuizClient from "./NormalQuizClient"
 import { QuestionType } from "@/types/type";
+import { cookies } from "next/headers";
 
 const question: QuestionType[] = [
   {
@@ -19,7 +20,15 @@ const question: QuestionType[] = [
 
 export default async function NormalQuizPage({ params }: { params: {id: string } }) {
   const { id } = await params;
-  // const question: QuestionType[] = await GetQuestion("easy", id)
+
+  const cookieStore = await cookies()
+  const token = cookieStore.get("token")?.value
+
+  if (!token) {
+    return <div className="text-center text-red-500 mt-30">ログインが必要です。</div>
+  }
+
+  // const question: QuestionType[] = await GetQuestion("easy", id, token)
   console.log("question", question)
 
   if (!question) {

@@ -19,12 +19,11 @@ export type UserType = {
 export type QuestionType = {
   questionId: number
   question: string
-  choices: ChoiceType[]
+  option1: string,
+  option2: string,
+  option3: string,
+  option4: string,
   answer: string
   explanation: string
-}
-
-type ChoiceType = {
-  key: string
-  text: string
+  level: string
 }
