@@ -6,6 +6,7 @@ import Level from "@/components/level-ranking";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Card, CardContent } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import Cookies from "js-cookie";
 
 // const ranking = [
 //   {
@@ -85,7 +86,8 @@ const WEIGHT = {
 } as const;
 
 export default function RankingPage() {
-  const userId = "5";
+  const userId = Cookies.get("userId");
+  const token = Cookies.get("token");
   const [selectedLevel, setSelectedLevel] = useState<
     "easy" | "normal" | "hard" | "all"
   >("all");
@@ -103,7 +105,10 @@ export default function RankingPage() {
   useEffect(() => {
     (async () => {
       const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/rankings/`, {
-        cache: "no-store"
+        cache: "no-store",
+        headers: {
+          "Authorization": `Bearer ${token}`
+        },
       });
       const data = (await res.json()) as RankingData;
       setRankingData(data);
