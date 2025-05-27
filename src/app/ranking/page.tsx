@@ -51,11 +51,18 @@ import Cookies from "js-cookie";
 //   },
 // ];
 
+// type Score = {
+//   userId: string;
+//   userName: string;
+//   rank: number;
+//   correctNum: number;
+// };
+
 type Score = {
   userId: string;
   userName: string;
   rank: number;
-  correctNum: number;
+  clearNum: number;
 };
 
 type RankingData = {
@@ -90,7 +97,7 @@ export default function RankingPage() {
   const token = Cookies.get("token");
   const [selectedLevel, setSelectedLevel] = useState<
     "easy" | "normal" | "hard" | "all"
-  >("all");
+  >("easy");
   const [rankingData, setRankingData] = useState<RankingData | undefined>(
     undefined
   );
@@ -116,7 +123,7 @@ export default function RankingPage() {
   }, []);
 
   useEffect(() => {
-    console.log(rankingData);
+    console.log("rankingDataは",rankingData);
     convertData();
   }, [rankingData]);
 
@@ -132,6 +139,8 @@ export default function RankingPage() {
 
     (Object.keys(rankingData) as (keyof RankingData)[]).forEach((level) => {
       for (const score of rankingData[level]) {
+        console.log(score);
+
         if (userScoreMap[score.userId] === undefined) {
           userScoreMap[score.userId] = {
             userId: score.userId,
@@ -141,14 +150,14 @@ export default function RankingPage() {
           };
         }
         userScoreMap[score.userId].score +=
-          score.correctNum * WEIGHT[level as keyof typeof WEIGHT];
+          score.clearNum * WEIGHT[level as keyof typeof WEIGHT];
       }
     });
     const userScoreMapFn = (score: Score): UserScore => ({
       userId: score.userId,
       userName: score.userName,
       isMe: score.userId === userId,
-      score: score.correctNum * WEIGHT[selectedLevel],
+      score: score.clearNum * WEIGHT[selectedLevel],
     });
 
     setRankingSummary({
@@ -224,8 +233,8 @@ export default function RankingPage() {
                 <Card
                   key={user.userId}
                   className={`w-full ${user.isMe
-                      ? "dark:border-white border-orange-500 bg-orange-50"
-                      : ""
+                    ? "dark:border-white border-orange-500 bg-orange-50"
+                    : ""
                     }`}
                 >
                   <CardContent
