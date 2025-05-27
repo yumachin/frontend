@@ -61,7 +61,6 @@ export default function SignInPage() {
       await Resister(userObject)
       const profile = await GetProfile(user.uid, token)
       setUser(profile)
-      console.log("ログイン成功:", user)
       return true
     } catch (error) {
       console.error("ログイン失敗:", error)
@@ -73,7 +72,6 @@ export default function SignInPage() {
 
   const handleFirstRouting = async () => {
     const success = await handleGoogleLogin()
-    console.log("handleFirstRoutingの成功:", success)
     if (success) {
       router.push("/")
     }

@@ -1,4 +1,7 @@
-export const GetProfile = async (userId: string, token: string) => {
+export const GetProfile = async (userId: string | undefined, token: string | undefined) => {
+  if (!token || !userId) {
+    throw new Error("Token or userId is not found in cookies");
+  }
   const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/users/${userId}`, {
     cache: "no-store",
     headers: {

@@ -75,7 +75,6 @@ export default function RankingPage() {
   }, []);
 
   useEffect(() => {
-    console.log(rankingData);
     convertData();
   }, [rankingData]);
 

@@ -29,7 +29,7 @@ export default function Header() {
 
   const pathname = usePathname()
   // 表示したくないパス一覧
-  const hiddenPaths = ["/signIn", "/sign-up", "/reset-password", "/quiz/easy/", "/quiz/normal/", "/quiz/hard/"]
+  const hiddenPaths = ["/signIn", "/sign-up", "/reset-password", "/quiz/easy/", "/quiz/normal/", "/quiz/hard/", "/answer/"]
 
   if (hiddenPaths.some(prefix => pathname.startsWith(prefix))) {
     return null
