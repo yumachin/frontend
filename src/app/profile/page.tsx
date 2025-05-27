@@ -110,7 +110,7 @@ export default function ProfilePage() {
   return (
     <div className="flex flex-col items-center">
       <div className="h-24 lg:h-28" />
-      <div className="w-full max-w-sm lg:max-w-7xl">
+      <div className="w-full max-w-sm lg:max-w-7xl px-2">
         <Tabs defaultValue="overview" className="space-y-6">
           <TabsList className="grid grid-cols-2 w-full">
             <TabsTrigger value="overview">概要</TabsTrigger>
@@ -207,9 +207,9 @@ export default function ProfilePage() {
           </TabsContent>
 
           <TabsContent value="settings">
-            <div className="space-y-4">
+            <div className="space-y-4 px-4">
               <h2 className="text-lg font-bold">設定</h2>
-              <p className="text-sm text-muted-foreground">設定ページは、これから逐一追加していく予定です。</p>
+              <p className="text-xs lg:text-sm text-muted-foreground">設定ページは、これから追加していきます。</p>
               <Button
                 variant="outline"
                 className="w-full bg-red-500 dark:bg-red-500 text-white hover:text-white hover:bg-red-600 dark:hover:bg-red-600"
@@ -221,6 +221,7 @@ export default function ProfilePage() {
           </TabsContent>
         </Tabs>
       </div>
+      <div className="mb-18"></div>
       <Footer />
     </div>
   );
