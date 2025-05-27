@@ -15,6 +15,7 @@ const UserContext = createContext<UserContextType | undefined>(undefined)
 
 export const UserProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<UserType>(null)
+  
   const router = useRouter()
 
   useEffect(() => {
@@ -37,8 +38,9 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
     };
 
     fetchUser();
-  }, []);
+  }, [user]);
 
+  console.log("Userは(状態管理debug)", user)
   const contextValue = useMemo(() => ({ user, setUser }), [user])
 
   return (

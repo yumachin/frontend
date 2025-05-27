@@ -22,7 +22,7 @@ export default function RootLayout({
     <html lang="ja" suppressHydrationWarning>
       <body className={inter.className}>
         <UserProvider>
-          <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
+          <ThemeProvider attribute="class" defaultTheme="dark" enableSystem={false} disableTransitionOnChange>
             <Header />
             <main className="min-h-screen">{children}</main>
           </ThemeProvider>

@@ -8,30 +8,24 @@ import { Button } from "./ui/button"
 import { useUser } from "@/context/UserContext"
 import { useEffect, useState } from "react"
 
-type FinishUiProps = {
-  level: string
-}
-
-export default function FinishUi(props: FinishUiProps) {
+export default function FinishUi(props: {level: string}) {
   const { user } = useUser()
   const [totalQuestions, setTotalQuestions] = useState(0);
-  const [correctAnswers, setCorrectAnswers] = useState(0);
+  const [clearAnswers, setClearAnswers] = useState(0);
 
   useEffect(() => {
     if (!user) return;
     if (props.level === "easy") {
-      setTotalQuestions(user.stats.easyClearNum)
-      setCorrectAnswers(user.stats.easyCorrectNum)
+      setTotalQuestions(user.stats.easyCorrectNum)
+      setClearAnswers(user.stats.easyClearNum)
     } else if (props.level === "normal") {
-      setTotalQuestions(user.stats.normalClearNum)
-      setCorrectAnswers(user.stats.normalCorrectNum)
+      setTotalQuestions(user.stats.normalCorrectNum)
+      setClearAnswers(user.stats.normalClearNum)
     } else {
-      setTotalQuestions(user.stats.hardClearNum)
-      setCorrectAnswers(user.stats.hardCorrectNum)
+      setTotalQuestions(user.stats.hardCorrectNum)
+      setClearAnswers(user.stats.hardClearNum)
     }
   }, [user, props.level])
-
-  
 
   return (
     <div className="min-h-screen from-blue-50 to-indigo-100 flex items-center justify-center p-4">
@@ -50,7 +44,7 @@ export default function FinishUi(props: FinishUiProps) {
             <div className="flex items-center justify-center gap-2 mb-4">
               <Trophy className="w-10 h-10 text-yellow-500" />
               <span className="text-xl text-black dark:text-white">
-                {correctAnswers}/{totalQuestions}問正解
+                {clearAnswers}/{totalQuestions}問正解
               </span>
             </div>
           </div>
@@ -58,7 +52,6 @@ export default function FinishUi(props: FinishUiProps) {
           {/* Encouragement Message */}
           <div className="text-center p-4 bg-blue-50 rounded-lg dark:bg-gray-700">
             <div className="text-sm text-blue-800 dark:text-white">
-
               <h1 className="text-blue-800 dark:text-white px-4 py-2">
                 よくできました
               </h1>

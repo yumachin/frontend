@@ -7,6 +7,8 @@ import { vscDarkPlus, oneLight } from "react-syntax-highlighter/dist/esm/styles/
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import Footer from "@/components/footer"
+import Loading from "@/components/loading"
+import { useUser } from "@/context/UserContext"
 
 const codeString = `
 <p className="mx-auto max-w-[700px] text-sm sm:text-base text-gray-500 dark:text-gray-400">
@@ -31,10 +33,7 @@ export default function HomePage() {
 
   if (!mounted) {
     return (
-      <div className="flex flex-col justify-center items-center min-h-screen text-gray-500 dark:text-gray-300">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-4 border-b-4 border-orange-500 mb-4"></div>
-        <p className="text-xl font-semibold tracking-wide">Loading Arena...</p>
-      </div>
+      <Loading />
     )
   }
 
