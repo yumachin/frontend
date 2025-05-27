@@ -20,6 +20,7 @@ import { Resister } from "@/lib/api/auth"
 import Cookies from "js-cookie"
 import { GetProfile } from "@/lib/api/user"
 import { useUser } from "@/context/UserContext"
+import Loading from "@/components/loading"
 
 export default function SignInPage() {
   const { setUser } = useUser()
@@ -72,12 +73,15 @@ export default function SignInPage() {
 
   const handleFirstRouting = async () => {
     const success = await handleGoogleLogin()
+    console.log("handleFirstRoutingの成功:", success)
     if (success) {
       router.push("/")
     }
   }
 
-  return (
+  return isSigningIn ? (
+    <Loading />
+  ) : (
     <div className="min-h-screen bg-black text-white flex flex-col">
       {/* Main Content */}
       <main className="flex-1 flex items-center justify-center p-4">

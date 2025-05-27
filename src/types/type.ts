@@ -17,7 +17,7 @@ export type UserType = {
 } | null
 
 export type QuestionType = {
-  questionId: number
+  questionid: number
   question: string
   option1: string,
   option2: string,

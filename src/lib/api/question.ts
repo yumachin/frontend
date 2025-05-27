@@ -1,9 +1,9 @@
-export const GetQuestion = async (mode: string, id: string, token: string) => {
+export const GetQuestion = async (level: string | null, id: string, token: string | undefined) => {
   if (!token) {
     throw new Error("Token not found in cookies");
   }
 
-  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/questions/${mode}/${id}`, {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/questions/${level}/${id}`, {
     cache: "no-store"
   })
 
@@ -11,7 +11,7 @@ export const GetQuestion = async (mode: string, id: string, token: string) => {
     throw new Error("問題の取得に失敗しました");
   }
 
-  const data = await res.json()
+  const data = await res.json();
   return data;
 }
 

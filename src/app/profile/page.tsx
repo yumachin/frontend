@@ -6,10 +6,12 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import Footer from "@/components/footer"
 import { Progress } from "@/components/ui/progress"
 import { Button } from "@/components/ui/button"
-import { useMemo } from "react"
+import { useEffect, useMemo, useState } from "react"
 import { useUser } from "@/context/UserContext"
 import Cookies from "js-cookie"
 import { useRouter } from "next/navigation"
+import { UpdateProfile } from "@/lib/api/user"
+import Loading from "@/components/loading"
 
 type StatsProps = {
   difficulty: string;
@@ -18,20 +20,17 @@ type StatsProps = {
 }
 
 const DifficultyProgress = ({ difficulty, clearNum, correctNum }: StatsProps) => {
-  const percentage = clearNum > 0 ? Math.round((correctNum / clearNum) * 100) : 0;
-  
+  const percentage = clearNum > 0 ? Math.round((clearNum / correctNum) * 100) : 0;
+
   return (
     <div className="space-y-2">
       <div className="flex justify-between items-center px-4">
         <span className="lg:text-lg">{difficulty}</span>
         <span className="lg:text-lg">
-          {correctNum}/{clearNum} <span className="text-sm text-muted-foreground ml-2">({percentage}%)</span>
+          {clearNum}/{correctNum} <span className="text-sm text-muted-foreground ml-2">({percentage}%)</span>
         </span>
       </div>
-      <Progress 
-        value={percentage} 
-        className="h-2 lg:h-3"
-      />
+      <Progress value={percentage} className="h-2 lg:h-3" />
     </div>
   );
 };
@@ -39,8 +38,18 @@ const DifficultyProgress = ({ difficulty, clearNum, correctNum }: StatsProps) =>
 export default function ProfilePage() {
   const { user, setUser } = useUser();
   const router = useRouter();
+  const [isEditing, setIsEditing] = useState(false);
+  const [newUserName, setNewUserName] = useState(user?.userName || "");
+  const token = Cookies.get("token");
+  const userId = Cookies.get("userId");
 
-  const solvedCount = useMemo(() => (
+  useEffect(() => {
+    if (user?.userName) {
+      setNewUserName(user.userName);
+    }
+  }, [user?.userName]);
+
+  const clearCount = useMemo(() => (
     user?.stats
       ? user.stats.hardClearNum + user.stats.normalClearNum + user.stats.easyClearNum
       : 0
@@ -52,29 +61,30 @@ export default function ProfilePage() {
       : 0
   ), [user]);
 
-  if (!user) {
-    return (
-      <div className="flex flex-col justify-center items-center min-h-screen text-gray-500 dark:text-gray-300">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-4 border-b-4 border-orange-500 mb-4"></div>
-        <p className="text-xl font-semibold tracking-wide">Loading Arena...</p>
-      </div>
-    )
-  }
+  if (!user || !user.stats || !user.userName || !user.email) return <Loading />
 
-  const handleEdit = () => {
-    alert("この機能は開発中です。");
-  }
-
+  const handleEdit = async () => {
+    try {
+      const message = await UpdateProfile(userId, token, newUserName);
+      if (message) {
+        setIsEditing(false);
+        window.location.reload();
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+  
   const handleLogout = () => {
-    Cookies.remove("token", { path: "/" });
-    Cookies.remove("userId", { path: "/" });
+    Cookies.remove("token");
+    Cookies.remove("userId");
     setUser(null);
     router.push("/signIn");
-  }
-
+  };
+  
   return (
     <div className="flex flex-col items-center">
-      <div className="h-24 lg:h-28"></div>
+      <div className="h-24 lg:h-28" />
       <div className="w-full max-w-sm lg:max-w-7xl">
         <Tabs defaultValue="overview" className="space-y-6">
           <TabsList className="grid grid-cols-2 w-full">
@@ -87,22 +97,40 @@ export default function ProfilePage() {
               <Card className="col-span-2">
                 <CardHeader className="flex items-center justify-between">
                   <CardTitle>プロフィール</CardTitle>
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={handleEdit}
-                  >
-                    編集（開発中）
-                  </Button>
+                  {!isEditing && (
+                    <Button variant="outline" size="sm" onClick={() => setIsEditing(true)}>
+                      編集
+                    </Button>
+                  )}
                 </CardHeader>
                 <CardContent className="flex items-center gap-8">
                   <Avatar className="h-24 w-24">
                     <AvatarImage src={`${process.env.NEXT_PUBLIC_API_URL}/${user.iconPath}`} alt={user.userName} />
-                    <AvatarFallback>{user.userName.charAt(0)}</AvatarFallback>
+                    <AvatarFallback>{user.userName.charAt(0) ?? "?"}</AvatarFallback>
                   </Avatar>
                   <div>
-                    <h3 className="text-xl font-bold mb-2">{user.userName}</h3>
-                    <p className="text-muted-foreground">{user.email}</p>
+                    {isEditing ? (
+                      <>
+                        <input
+                          type="text"
+                          value={newUserName}
+                          onChange={(e) => setNewUserName(e.target.value)}
+                          className="border rounded px-2 py-1 mb-2 text-lg"
+                        />
+                        <div className="space-x-2">
+                          <Button size="sm" onClick={handleEdit}>保存</Button>
+                          <Button variant="outline" size="sm" onClick={() => {
+                            setNewUserName(user.userName);
+                            setIsEditing(false);
+                          }}>キャンセル</Button>
+                        </div>
+                      </>
+                    ) : (
+                      <>
+                        <h3 className="text-md lg:text-xl font-bold mb-2">{user.userName}</h3>
+                        <p className="test-xs text-muted-foreground lg:text-md">{user.email}</p>
+                      </>
+                    )}
                   </div>
                 </CardContent>
               </Card>
@@ -112,7 +140,7 @@ export default function ProfilePage() {
                   <CardTitle>総回答数</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <div className="text-2xl font-bold">{solvedCount}</div>
+                  <div className="text-2xl font-bold">{correctCount}</div>
                 </CardContent>
               </Card>
 
@@ -121,7 +149,7 @@ export default function ProfilePage() {
                   <CardTitle>総正答数</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <div className="text-2xl font-bold">{correctCount}</div>
+                  <div className="text-2xl font-bold">{clearCount}</div>
                 </CardContent>
               </Card>
             </div>
@@ -131,21 +159,9 @@ export default function ProfilePage() {
                 <CardTitle>難易度別 正答率</CardTitle>
               </CardHeader>
               <CardContent className="grid gap-6 lg:gap-12">
-                <DifficultyProgress 
-                  difficulty="初級" 
-                  clearNum={user.stats.easyClearNum} 
-                  correctNum={user.stats.easyCorrectNum} 
-                />
-                <DifficultyProgress 
-                  difficulty="中級" 
-                  clearNum={user.stats.normalClearNum} 
-                  correctNum={user.stats.normalCorrectNum} 
-                />
-                <DifficultyProgress 
-                  difficulty="上級" 
-                  clearNum={user.stats.hardClearNum} 
-                  correctNum={user.stats.hardCorrectNum} 
-                />
+                <DifficultyProgress difficulty="初級" clearNum={user.stats.easyClearNum} correctNum={user.stats.easyCorrectNum} />
+                <DifficultyProgress difficulty="中級" clearNum={user.stats.normalClearNum} correctNum={user.stats.normalCorrectNum} />
+                <DifficultyProgress difficulty="上級" clearNum={user.stats.hardClearNum} correctNum={user.stats.hardCorrectNum} />
               </CardContent>
             </Card>
           </TabsContent>
@@ -154,8 +170,8 @@ export default function ProfilePage() {
             <div className="space-y-4">
               <h2 className="text-lg font-bold">設定</h2>
               <p className="text-sm text-muted-foreground">この機能は開発中です。</p>
-              <Button 
-                variant="outline" 
+              <Button
+                variant="outline"
                 className="w-full bg-red-500 dark:bg-red-500 text-white hover:text-white hover:bg-red-600 dark:hover:bg-red-600"
                 onClick={handleLogout}
               >
@@ -167,5 +183,5 @@ export default function ProfilePage() {
       </div>
       <Footer />
     </div>
-  )
+  );
 }
