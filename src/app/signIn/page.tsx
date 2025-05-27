@@ -97,7 +97,9 @@ export default function SignInPage() {
                   id="email"
                   type="email"
                   placeholder="you@example.com"
+                  autoComplete="username"
                   className="bg-zinc-800 border-zinc-700 text-sm text-white placeholder:text-zinc-500"
+                  
                 />
               </div>
               <div className="space-y-2">
