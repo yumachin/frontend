@@ -88,49 +88,49 @@ export default function SignInPage() {
             <CardTitle className="text-2xl font-bold text-center text-white">ログイン</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
-            <div className="space-y-2">
-              <Label htmlFor="email" className="text-zinc-300">
-                メールアドレス（開発予定）
-              </Label>
-              <Input
-                id="email"
-                type="email"
-                placeholder="you@example.com"
-                className="bg-zinc-800 border-zinc-700 text-white placeholder:text-zinc-500"
-              />
-            </div>
-            <div className="space-y-2">
-              <div className="flex items-center justify-between">
-                <Label htmlFor="password" className="text-zinc-300">
-                  パスワード（開発予定）
+            <form className="space-y-8" onSubmit={() => alert("ログイン機能は開発中です。")}>
+              <div className="space-y-2">
+                <Label htmlFor="email" className="text-zinc-300">
+                  メールアドレス
                 </Label>
-                <Link href="#" onClick={() => alert("パスワードの再設定機能は開発中です。")} className="text-xs text-zinc-400 hover:text-white">
-                  パスワードをお忘れですか？
-                </Link>
-              </div>
-              <div className="relative">
                 <Input
-                  id="password"
-                  type={showPassword ? "text" : "password"}
-                  className="bg-zinc-800 border-zinc-700 text-white pr-10 placeholder:text-zinc-500"
-                  placeholder="••••••••"
+                  id="email"
+                  type="email"
+                  placeholder="you@example.com"
+                  className="bg-zinc-800 border-zinc-700 text-sm text-white placeholder:text-zinc-500"
                 />
-                <button
-                  type="button"
-                  onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-2.5 text-zinc-400 hover:text-white"
-                >
-                  {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
-                </button>
               </div>
-              <div className="text-xs text-zinc-500 font-mono">※ セキュリティのため8文字以上</div>
-            </div>
-            <Button
-              className="w-full bg-white text-black hover:bg-zinc-200"
-              onClick={() => alert("ログイン機能は開発中です。")}
-            >
-              ログイン（開発予定）
-            </Button>
+              <div className="space-y-2">
+                <div className="flex items-center justify-between">
+                  <Label htmlFor="password" className="text-zinc-300">
+                    パスワード
+                  </Label>
+                  <Link href="#" onClick={() => alert("パスワードの再設定機能は開発中です。")} className="text-xs text-zinc-400 hover:text-white">
+                    パスワードをお忘れですか？
+                  </Link>
+                </div>
+                <div className="relative">
+                  <Input
+                    id="password"
+                    type={showPassword ? "text" : "password"}
+                    className="bg-zinc-800 border-zinc-700 text-white pr-10 placeholder:text-zinc-500"
+                    placeholder="••••••••"
+                    autoComplete="current-password"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="absolute right-3 top-2.5 text-zinc-400 hover:text-white"
+                  >
+                    {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                  </button>
+                </div>
+                <div className="text-xs text-zinc-500 font-mono">※ セキュリティのため8文字以上</div>
+              </div>
+              <Button className="w-full bg-white text-black hover:bg-zinc-200">
+                ログイン（開発予定）
+              </Button>
+            </form>
             <div className="relative">
               <div className="absolute inset-0 flex items-center">
                 <span className="w-full border-t border-zinc-700" />

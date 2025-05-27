@@ -12,6 +12,9 @@ import Cookies from "js-cookie"
 import { useRouter } from "next/navigation"
 import { GetProfile, UpdateProfile } from "@/lib/api/user"
 import Loading from "@/components/loading"
+import { useForm } from "react-hook-form"
+import { zodResolver } from "@hookform/resolvers/zod"
+import { ProfileFormData, ProfileSchema } from "@/utils/validationSchema"
 
 type StatsProps = {
   difficulty: string;
@@ -42,6 +45,16 @@ export default function ProfilePage() {
   const [newUserName, setNewUserName] = useState(user?.userName || "");
   const token = Cookies.get("token");
   const userId = Cookies.get("userId");
+  const form = useForm<ProfileFormData>({
+    resolver: zodResolver(ProfileSchema),
+    defaultValues: {
+      userName: user?.userName || "",
+    },
+  });
+
+  useEffect(() => {
+    form.reset({ userName: user?.userName || "" });
+  }, [user, form.reset]);
 
   useEffect(() => {
     const newFetchUser = async () => {
@@ -122,25 +135,40 @@ export default function ProfilePage() {
                   </Avatar>
                   <div>
                     {isEditing ? (
-                      <>
+                      <form onSubmit={form.handleSubmit(handleEdit)}>
                         <input
                           type="text"
-                          value={newUserName}
-                          onChange={(e) => setNewUserName(e.target.value)}
-                          className="border rounded px-2 py-1 mb-2 text-lg"
+                          {...form.register("userName")}
+                          className={`border rounded px-2 py-2 text-md ${form.formState.errors.userName ? "border-red-500" : ""}`}
+                          disabled={form.formState.isSubmitting}
                         />
-                        <div className="space-x-2">
-                          <Button size="sm" onClick={handleEdit}>保存</Button>
-                          <Button variant="outline" size="sm" onClick={() => {
-                            setNewUserName(user.userName);
-                            setIsEditing(false);
-                          }}>キャンセル</Button>
+                        {form.formState.errors.userName && (
+                          <p className="text-red-500 text-xs lg:text-sm mb-2 ml-1">{form.formState.errors.userName.message}</p>
+                        )}
+                        <div className="space-x-8 mt-4">
+                          <button
+                            type="submit"
+                            className="bg-orange-400 text-xs text-white py-1 px-4 rounded hover:bg-orange-500"
+                            disabled={form.formState.isSubmitting}
+                          >
+                            保存
+                          </button>
+                          <button
+                            className="bg-gray-200 text-xs text-gray-800 py-1 px-4 rounded hover:bg-gray-300"
+                            onClick={() => {
+                              form.reset({ userName: user.userName });
+                              setIsEditing(false);
+                            }}
+                            disabled={form.formState.isSubmitting}
+                          >
+                            キャンセル
+                          </button>
                         </div>
-                      </>
+                      </form>
                     ) : (
                       <>
                         <h3 className="text-md lg:text-xl font-bold mb-2">{user.userName}</h3>
-                        <p className="test-xs text-muted-foreground lg:text-md">{user.email}</p>
+                        <p className="text-xs text-muted-foreground lg:text-md">{user.email}</p>
                       </>
                     )}
                   </div>

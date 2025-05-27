@@ -9,8 +9,9 @@ import { UserProvider } from "@/context/UserContext"
 const inter = Inter({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
-  title: "Prog Battle - FE",
+  title: "Tech Arena",
   description: "this is frontend",
+  manifest: "/manifest.json"
 }
 
 export default function RootLayout({
