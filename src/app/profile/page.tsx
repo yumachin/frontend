@@ -42,7 +42,6 @@ export default function ProfilePage() {
   const { user, setUser } = useUser();
   const router = useRouter();
   const [isEditing, setIsEditing] = useState(false);
-  const [newUserName, setNewUserName] = useState(user?.userName || "");
   const token = Cookies.get("token");
   const userId = Cookies.get("userId");
   const form = useForm<ProfileFormData>({
@@ -68,12 +67,6 @@ export default function ProfilePage() {
     newFetchUser();
   }, [])
 
-  useEffect(() => {
-    if (user?.userName) {
-      setNewUserName(user.userName);
-    }
-  }, [user?.userName]);
-
   const clearCount = useMemo(() => (
     user?.stats
       ? user.stats.hardClearNum + user.stats.normalClearNum + user.stats.easyClearNum
@@ -88,9 +81,11 @@ export default function ProfilePage() {
 
   if (!user || !user.stats || !user.userName || !user.email) return <Loading />
 
-  const handleEdit = async () => {
+  const handleEdit = async (data: ProfileFormData) => {
     try {
-      const message = await UpdateProfile(userId, token, newUserName);
+      console.log("newUserName", data.userName)
+      const message = await UpdateProfile(userId, token, data.userName);
+      console.log(message)
       if (message) {
         setIsEditing(false);
         window.location.reload();
@@ -130,7 +125,10 @@ export default function ProfilePage() {
                 </CardHeader>
                 <CardContent className="flex items-center gap-8">
                   <Avatar className="h-24 w-24">
-                    <AvatarImage src={`${process.env.NEXT_PUBLIC_API_URL}/${user.iconPath}`} alt={user.userName} />
+                    {/* 写真を登録できるようになったらこれにする */}
+                    {/* <AvatarImage src={`${process.env.NEXT_PUBLIC_API_URL}/${user.iconPath}`} alt={user.userName} />
+                    <AvatarFallback>{user.userName.charAt(0) ?? "?"}</AvatarFallback> */}
+                    <AvatarImage src={`https://api.dicebear.com/7.x/thumbs/svg?seed=${user.userName}`} alt={user.userName} />
                     <AvatarFallback>{user.userName.charAt(0) ?? "?"}</AvatarFallback>
                   </Avatar>
                   <div>
@@ -139,22 +137,22 @@ export default function ProfilePage() {
                         <input
                           type="text"
                           {...form.register("userName")}
-                          className={`border rounded px-2 py-2 text-md ${form.formState.errors.userName ? "border-red-500" : ""}`}
+                          className={`w-full border rounded-md px-3 py-2 text-sm lg:text-md ${form.formState.errors.userName ? "border-red-500" : ""}`}
                           disabled={form.formState.isSubmitting}
                         />
                         {form.formState.errors.userName && (
-                          <p className="text-red-500 text-xs lg:text-sm mb-2 ml-1">{form.formState.errors.userName.message}</p>
+                          <p className="text-red-500 text-xs lg:text-sm my-1 ml-1">{form.formState.errors.userName.message}</p>
                         )}
-                        <div className="space-x-8 mt-4">
+                        <div className="space-x-6 mt-4 ml-1">
                           <button
                             type="submit"
-                            className="bg-orange-400 text-xs text-white py-1 px-4 rounded hover:bg-orange-500"
+                            className="bg-orange-400 text-xs text-white py-1 px-3 rounded hover:bg-orange-500"
                             disabled={form.formState.isSubmitting}
                           >
                             保存
                           </button>
                           <button
-                            className="bg-gray-200 text-xs text-gray-800 py-1 px-4 rounded hover:bg-gray-300"
+                            className="bg-gray-200 text-xs text-gray-800 py-1 px-3 rounded hover:bg-gray-300"
                             onClick={() => {
                               form.reset({ userName: user.userName });
                               setIsEditing(false);
@@ -177,19 +175,19 @@ export default function ProfilePage() {
 
               <Card>
                 <CardHeader className="flex flex-row items-center justify-between pb-2">
-                  <CardTitle>総回答数</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="text-2xl font-bold">{correctCount}</div>
-                </CardContent>
-              </Card>
-
-              <Card>
-                <CardHeader className="flex flex-row items-center justify-between pb-2">
                   <CardTitle>総正答数</CardTitle>
                 </CardHeader>
                 <CardContent>
                   <div className="text-2xl font-bold">{clearCount}</div>
+                </CardContent>
+              </Card>
+              
+              <Card>
+                <CardHeader className="flex flex-row items-center justify-between pb-2">
+                  <CardTitle>総回答数</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="text-2xl font-bold">{correctCount}</div>
                 </CardContent>
               </Card>
             </div>
@@ -221,7 +219,7 @@ export default function ProfilePage() {
           </TabsContent>
         </Tabs>
       </div>
-      <div className="mb-18"></div>
+      <div className="mb-18 lg:hidden"></div>
       <Footer />
     </div>
   );

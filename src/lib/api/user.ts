@@ -21,6 +21,7 @@ export const UpdateProfile = async (userId: string | undefined, token: string | 
   if (!token || !userId) {
     throw new Error("Token or userId is not found in cookies");
   }
+  console.log("userName", userName)
   try {
     const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/users/${userId}`,{
       method: "PUT",

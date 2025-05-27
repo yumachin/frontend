@@ -205,6 +205,7 @@ export default function RankingPage() {
                         <Avatar>
                           <AvatarImage
                             src={`https://api.dicebear.com/7.x/thumbs/svg?seed=${user.userName}`}
+                            alt={user.userName}
                           />
                           <AvatarFallback>{user.userName.charAt(0)}</AvatarFallback>
                         </Avatar>
