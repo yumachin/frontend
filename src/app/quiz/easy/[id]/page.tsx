@@ -6,7 +6,7 @@ import NotToken from "@/components/not-token";
 import NotQuestion from "@/components/not-question";
 
 type EasyQuizPageProps = {
-  params: { id: string }
+  params: Promise<{ id: string }>
 }
 
 export default async function EasyQuizPage({ params }: EasyQuizPageProps) {
