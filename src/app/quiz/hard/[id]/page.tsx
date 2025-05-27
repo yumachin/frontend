@@ -5,7 +5,11 @@ import { cookies } from "next/headers";
 import NotToken from "@/components/not-token";
 import NotQuestion from "@/components/not-question";
 
-export default async function HardQuizPage({ params }: { params: { id: string } }) {
+type HardQuizPageProps = {
+  params: { id: string }
+}
+
+export default async function HardQuizPage({ params }: HardQuizPageProps) {
   const { id } = await params;
 
   const cookieStore = await cookies()

@@ -12,7 +12,11 @@ import Loading from "@/components/loading"
 import { useUser } from "@/context/UserContext"
 import { GetProfile } from "@/lib/api/user"
 
-export default function QuizInterface({ params }: { params: Promise<{ id: string }> }){
+type AnswerPageProps = {
+  params: Promise<{ id: string }>
+}
+
+export default function AnswerPage({ params }: AnswerPageProps){
   const [question, setQuestion] = useState<QuestionType | null>(null)
   const [answered, setAnswered] = useState<boolean | null>(null)
   const [showExplanation, setShowExplanation] = useState(false)

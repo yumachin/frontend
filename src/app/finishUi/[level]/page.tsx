@@ -3,7 +3,11 @@
 import FinishUi from '@/components/finishui';
 import { use } from 'react';
 
-export default function Page({ params }: { params: Promise<{ level: string }> }) {
+type FinishUiPageProps = {
+  params: Promise<{ level: string }>
+}
+
+export default function FinishUiPage({ params }: FinishUiPageProps) {
     const { level } = use(params);
     return <FinishUi level={level} />;
 }

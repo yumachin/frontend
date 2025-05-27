@@ -181,7 +181,7 @@ export default function ProfilePage() {
           <TabsContent value="settings">
             <div className="space-y-4">
               <h2 className="text-lg font-bold">設定</h2>
-              <p className="text-sm text-muted-foreground">この機能は開発中です。</p>
+              <p className="text-sm text-muted-foreground">設定ページは、これから逐一追加していく予定です。</p>
               <Button
                 variant="outline"
                 className="w-full bg-red-500 dark:bg-red-500 text-white hover:text-white hover:bg-red-600 dark:hover:bg-red-600"

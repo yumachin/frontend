@@ -163,7 +163,7 @@ export default function RankingPage() {
             ）
           </p>
           <p className="text-xs text-muted-foreground text-center mb-6">
-            ＊初級は１pt、中級は２pt、上級は３pt換算
+            ※ 初級は１pt、中級は２pt、上級は３pt換算
           </p>
 
           <Level onLevelChange={setSelectedLevel} selectedLevel={selectedLevel} />
