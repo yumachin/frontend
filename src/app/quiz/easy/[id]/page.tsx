@@ -5,7 +5,11 @@ import { cookies } from "next/headers";
 import NotToken from "@/components/not-token";
 import NotQuestion from "@/components/not-question";
 
-export default async function EasyQuizPage({ params }: { params: { id: string } }) {
+type EasyQuizPageProps = {
+  params: { id: string }
+}
+
+export default async function EasyQuizPage({ params }: EasyQuizPageProps) {
   const { id } = await params;
 
   const cookieStore = await cookies()
