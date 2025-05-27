@@ -10,7 +10,7 @@ export default function Footer() {
   ]
 
   return (
-    <footer className="sm:hidden fixed bottom-0 left-0 w-full border-t bg-muted px-4 flex items-center justify-between z-50">
+    <footer className="sm:hidden fixed bottom-0 left-0 w-full border-t bg-muted flex items-center justify-between z-50">
       {/* ナビゲーションボタン */}
       <nav className="flex flex-1 justify-between">
         {navItems.map((item) => (
