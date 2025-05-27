@@ -10,7 +10,7 @@ export default function Footer() {
   ]
 
   return (
-    <footer className="sm:hidden fixed bottom-0 left-0 w-full border-t bg-muted px-6 flex items-center justify-between z-50">
+    <footer className="sm:hidden fixed bottom-0 left-0 w-full border-t bg-muted px-4 flex items-center justify-between z-50">
       {/* ナビゲーションボタン */}
       <nav className="flex flex-1 justify-between">
         {navItems.map((item) => (
@@ -21,9 +21,9 @@ export default function Footer() {
                 variant="ghost"
                 className="w-full justify-center"
               >
-                <item.icon className="h-6 w-6" />
+                <item.icon className="h-7 w-7" />
               </Button>
-              <span className="text-xs tracking-tight pb-2">{item.label}</span>
+              <span className="text-xs tracking-tight pb-4">{item.label}</span>
             </div>
           </Link>
         ))}

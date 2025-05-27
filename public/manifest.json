@@ -2,9 +2,9 @@
   "name": "Tech Arena",
   "short_name": "Tech Arena",
   "start_url": "/",
-  "display": "fullscreen",
-  "background_color": "#000000FF",
-  "theme_color": "#000000FF",
+  "display": "standalone",
+  "background_color": "#000000",
+  "theme_color": "#000000",
   "orientation": "portrait",
   "icons": [
     {
