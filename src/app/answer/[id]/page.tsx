@@ -10,19 +10,33 @@ import { QuestionType } from "@/types/type"
 import Cookies from "js-cookie"
 import Loading from "@/components/loading"
 import { useUser } from "@/context/UserContext"
+import { GetProfile } from "@/lib/api/user"
 
 export default function QuizInterface({ params }: { params: Promise<{ id: string }> }){
   const [question, setQuestion] = useState<QuestionType | null>(null)
   const [answered, setAnswered] = useState<boolean | null>(null)
   const [showExplanation, setShowExplanation] = useState(false)
   const [text, setText] = useState("")
-  const { user } = useUser()
+  const { user, setUser } = useUser()
   const unwrapParams = use(params);
   const router = useRouter()
   const token = Cookies.get("token")
+  const userId = Cookies.get("userId")
   const searchParams = useSearchParams()
   const level = searchParams.get("level")
   const selectedAnswer = searchParams.get("selectedAnswer")
+
+  useEffect(() => {
+    const newFetchUser = async () => {
+      try {
+        const profile = await GetProfile(userId, token);
+        setUser(profile);
+      } catch (error) {
+        console.error("ユーザー情報の取得中にエラー:", error);
+      }
+    }
+    newFetchUser();
+  }, [])
 
   useEffect(() => {
     if (!token) {
@@ -30,7 +44,6 @@ export default function QuizInterface({ params }: { params: Promise<{ id: string
     };
     const fetchQuestion = async () => {
       const fetchedQuestion: QuestionType = await GetQuestion(level, unwrapParams.id, token)
-      console.log("Fetched question:", fetchedQuestion)
       setQuestion(fetchedQuestion)
     }
     fetchQuestion()
@@ -70,6 +83,7 @@ export default function QuizInterface({ params }: { params: Promise<{ id: string
       router.push(`/quiz/${level}`)
       return
     }
+
     if (
       (level === "easy" && user.stats.easyCorrectNum === 10) ||
       (level === "normal" && user.stats.normalCorrectNum === 10) ||

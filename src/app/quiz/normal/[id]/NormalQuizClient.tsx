@@ -31,7 +31,6 @@ export default function NormalQuizClient({ question, id }: { question: QuestionT
     try {
       const res = await PostIfCorrect(user.userId, "normal", selectedAnswer === question.answer, token)
       if (res.message) {
-        
         router.push(`/answer/${user.stats.normalCorrectNum+1}?level=normal&selectedAnswer=${selectedAnswer}`)
       } else {
         throw new Error("API error")

@@ -10,7 +10,7 @@ import { useEffect, useMemo, useState } from "react"
 import { useUser } from "@/context/UserContext"
 import Cookies from "js-cookie"
 import { useRouter } from "next/navigation"
-import { UpdateProfile } from "@/lib/api/user"
+import { GetProfile, UpdateProfile } from "@/lib/api/user"
 import Loading from "@/components/loading"
 
 type StatsProps = {
@@ -42,6 +42,18 @@ export default function ProfilePage() {
   const [newUserName, setNewUserName] = useState(user?.userName || "");
   const token = Cookies.get("token");
   const userId = Cookies.get("userId");
+
+  useEffect(() => {
+    const newFetchUser = async () => {
+      try {
+        const profile = await GetProfile(userId, token);
+        setUser(profile);
+      } catch (error) {
+        console.error("ユーザー情報の取得中にエラー:", error);
+      }
+    }
+    newFetchUser();
+  }, [])
 
   useEffect(() => {
     if (user?.userName) {

@@ -8,7 +8,6 @@ import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import Footer from "@/components/footer"
 import Loading from "@/components/loading"
-import { useUser } from "@/context/UserContext"
 
 const codeString = `
 <p className="mx-auto max-w-[700px] text-sm sm:text-base text-gray-500 dark:text-gray-400">
@@ -31,11 +30,7 @@ export default function HomePage() {
 
   const syntaxStyle = theme === "dark" ? vscDarkPlus : oneLight
 
-  if (!mounted) {
-    return (
-      <Loading />
-    )
-  }
+  if (!mounted) return <Loading />
 
   return (
     <>
