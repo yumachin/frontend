@@ -105,7 +105,7 @@ export default function ProfilePage() {
   return (
     <div className="flex flex-col items-center">
       <div className="h-24 lg:h-28" />
-      <div className="w-full max-w-sm lg:max-w-7xl px-2">
+      <div className="w-full max-w-sm lg:max-w-7xl px-4">
         <Tabs defaultValue="overview" className="space-y-6">
           <TabsList className="grid grid-cols-2 w-full">
             <TabsTrigger value="overview">概要</TabsTrigger>
@@ -123,15 +123,15 @@ export default function ProfilePage() {
                     </Button>
                   )}
                 </CardHeader>
-                <CardContent className="flex items-center gap-8">
-                  <Avatar className="h-24 w-24">
+                <CardContent className="flex items-center gap-4 lg:gap-8">
+                  <Avatar className="h-16 w-16 lg:h-24 lg:w-24">
                     {/* 写真を登録できるようになったらこれにする */}
                     {/* <AvatarImage src={`${process.env.NEXT_PUBLIC_API_URL}/${user.iconPath}`} alt={user.userName} />
                     <AvatarFallback>{user.userName.charAt(0) ?? "?"}</AvatarFallback> */}
                     <AvatarImage src={`https://api.dicebear.com/7.x/thumbs/svg?seed=${user.userName}`} alt={user.userName} />
                     <AvatarFallback>{user.userName.charAt(0) ?? "?"}</AvatarFallback>
                   </Avatar>
-                  <div>
+                  <div className="w-full">
                     {isEditing ? (
                       <form onSubmit={form.handleSubmit(handleEdit)}>
                         <input
@@ -143,7 +143,7 @@ export default function ProfilePage() {
                         {form.formState.errors.userName && (
                           <p className="text-red-500 text-xs lg:text-sm my-1 ml-1">{form.formState.errors.userName.message}</p>
                         )}
-                        <div className="space-x-6 mt-4 ml-1">
+                        <div className="text-right space-x-6 mt-4 mr-3">
                           <button
                             type="submit"
                             className="bg-orange-400 text-xs text-white py-1 px-3 rounded hover:bg-orange-500"
@@ -165,7 +165,7 @@ export default function ProfilePage() {
                       </form>
                     ) : (
                       <>
-                        <h3 className="text-md lg:text-xl font-bold mb-2">{user.userName}</h3>
+                        <h3 className="text-sm lg:text-xl font-bold mb-2">{user.userName}</h3>
                         <p className="text-xs text-muted-foreground lg:text-md">{user.email}</p>
                       </>
                     )}
