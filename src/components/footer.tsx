@@ -12,7 +12,7 @@ export default function Footer() {
   return (
     <footer className="sm:hidden fixed bottom-0 left-0 w-full border-t bg-muted flex items-center justify-between z-50">
       {/* ナビゲーションボタン */}
-      <nav className="flex flex-1 justify-between">
+      <nav className="flex flex-1 justify-between px-4">
         {navItems.map((item) => (
           <Link key={item.label} href={item.href}>
             <div className="flex flex-col items-center w-full">
@@ -23,7 +23,7 @@ export default function Footer() {
               >
                 <item.icon className="h-7 w-7" />
               </Button>
-              <span className="text-xs tracking-tight pb-4">{item.label}</span>
+              <span className="text-xs tracking-tight pb-5">{item.label}</span>
             </div>
           </Link>
         ))}

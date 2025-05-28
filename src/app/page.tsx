@@ -41,7 +41,7 @@ export default function HomePage() {
             <h1 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl lg:text-6xl/none mb-8">
               Let&apos;s Go Arena!
             </h1>
-            <div className="max-w-sm lg:max-w-6xl">
+            <div className="max-w-sm lg:max-w-6xl mx-auto px-3">
               <SyntaxHighlighter
                 language="jsx"
                 style={syntaxStyle}
