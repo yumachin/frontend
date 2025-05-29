@@ -13,9 +13,9 @@ export default function ModePage() {
 
   if (!user) return <Loading />
 
-	const isEasyDone = user.stats.easyCorrectNum >= 10;
-  const isNormalDone = user.stats.normalCorrectNum >= 10;
-  const isHardDone = user.stats.hardCorrectNum >= 10;
+	const isEasyDone = user.stats.easyCorrectNum >= Number(process.env.NEXT_PUBLIC_QUESTION_COUNT);
+  const isNormalDone = user.stats.normalCorrectNum >= Number(process.env.NEXT_PUBLIC_QUESTION_COUNT);
+  const isHardDone = user.stats.hardCorrectNum >= Number(process.env.NEXT_PUBLIC_QUESTION_COUNT);
 
   const renderButtonContent = (levelName: string, correctNum: number, isDone: boolean) => (
     <>
@@ -32,7 +32,7 @@ export default function ModePage() {
   );
   
 	return (
-		<div className="flex flex-col items-center justify-center min-h-screen px-4 text-center">
+		<div className="fixed inset-0 flex flex-col items-center justify-center min-h-screen px-4 text-center">
       <div className='h-18'></div>
       <h1 className="text-3xl font-bold tracking-tight sm:text-4xl md:text-5xl lg:text-6xl mb-12">
         モード選択

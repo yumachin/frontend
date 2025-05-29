@@ -47,8 +47,12 @@ export default function AnswerPage({ params }: AnswerPageProps){
       router.push("/signIn")
     };
     const fetchQuestion = async () => {
-      const fetchedQuestion: QuestionType = await GetQuestion(level, unwrapParams.id, token)
-      setQuestion(fetchedQuestion)
+      try {
+        const question = await GetQuestion(level, unwrapParams.id, token)
+        setQuestion(question)
+      } catch (error) {
+        console.error("問題の取得中にエラー:", error)
+      }
     }
     fetchQuestion()
   }, [])
@@ -67,9 +71,9 @@ export default function AnswerPage({ params }: AnswerPageProps){
 
     const { easyCorrectNum, normalCorrectNum, hardCorrectNum } = user.stats;
     const isFinished =
-      (level === "easy" && easyCorrectNum === 10) ||
-      (level === "normal" && normalCorrectNum === 10) ||
-      (level === "hard" && hardCorrectNum === 10);
+      (level === "easy" && easyCorrectNum === Number(process.env.NEXT_PUBLIC_QUESTION_COUNT)) ||
+      (level === "normal" && normalCorrectNum === Number(process.env.NEXT_PUBLIC_QUESTION_COUNT)) ||
+      (level === "hard" && hardCorrectNum === Number(process.env.NEXT_PUBLIC_QUESTION_COUNT));
 
     setText(isFinished ? "お疲れ様でした！" : "次の問題へ");
   }, [user, level])
@@ -89,9 +93,9 @@ export default function AnswerPage({ params }: AnswerPageProps){
     }
 
     if (
-      (level === "easy" && user.stats.easyCorrectNum === 10) ||
-      (level === "normal" && user.stats.normalCorrectNum === 10) ||
-      (level === "hard" && user.stats.hardCorrectNum === 10)
+      (level === "easy" && user.stats.easyCorrectNum === Number(process.env.NEXT_PUBLIC_QUESTION_COUNT)) ||
+      (level === "normal" && user.stats.normalCorrectNum === Number(process.env.NEXT_PUBLIC_QUESTION_COUNT)) ||
+      (level === "hard" && user.stats.hardCorrectNum === Number(process.env.NEXT_PUBLIC_QUESTION_COUNT))
     ) {
       router.push(`/finishUi/${level}`)
     } else {
@@ -143,10 +147,10 @@ export default function AnswerPage({ params }: AnswerPageProps){
             {/* 問題文 */}
             <div className="bg-slate-50 dark:bg-black rounded-2xl p-6 border-2 border-slate-200 dark:border-slate-900">
               <div className="flex items-center gap-2 mb-3">
-                <BookOpen className="w-5 h-5 text-blue-600 dark:text-blue-400" />
-                <h3 className="font-semibold text-slate-700 dark:text-slate-300">問題</h3>
+                <BookOpen className="w-4 h-4 lg:w-5 lg:h-5 text-blue-600 dark:text-blue-400" />
+                <h3 className="font-semibold text-slate-700 dark:text-slate-300 text-sm lg:text-sm">問題</h3>
               </div>
-              <p className="text-slate-800 dark:text-slate-200 text-md lg:text-lg leading-relaxed">{question.question}</p>
+              <p className="text-slate-800 dark:text-slate-200 text-xs lg:text-lg leading-relaxed">{question.question}</p>
             </div>
 
             {/* 回答比較 */}
@@ -161,16 +165,16 @@ export default function AnswerPage({ params }: AnswerPageProps){
               >
                 <div className="flex items-center gap-2 mb-3">
                   <User
-                    className={`w-5 h-5 ${answered ? "text-green-600 dark:text-green-400" : "text-red-600 dark:text-red-400"}`}
+                    className={`w-4 h-4 lg:w-5 lg:h-5 ${answered ? "text-green-600 dark:text-green-400" : "text-red-600 dark:text-red-400"}`}
                   />
                   <h3
-                    className={`font-semibold ${answered ? "text-green-700 dark:text-green-300" : "text-red-700 dark:text-red-300"}`}
+                    className={`font-semibold text-xs lg:text-sm ${answered ? "text-green-700 dark:text-green-300" : "text-red-700 dark:text-red-300"}`}
                   >
                     あなたの回答
                   </h3>
                 </div>
                 <p
-                  className={`text-lg ${answered ? "text-green-800 dark:text-green-200" : "text-red-800 dark:text-red-200"}`}
+                  className={`text-sm lg:text-lg ${answered ? "text-green-800 dark:text-green-200" : "text-red-800 dark:text-red-200"}`}
                 >
                   {selectedAnswer}
                 </p>
@@ -180,9 +184,9 @@ export default function AnswerPage({ params }: AnswerPageProps){
               <div className="bg-emerald-50 dark:bg-emerald-900/20 rounded-2xl px-6 py-3 border-2 border-emerald-200 dark:border-emerald-700">
                 <div className="flex items-center gap-2 mb-3">
                   <CheckCircle2 className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
-                  <h3 className="font-semibold text-emerald-700 dark:text-emerald-300">正解</h3>
+                  <h3 className="font-semibold text-xs lg:text-sm text-emerald-700 dark:text-emerald-300">正解</h3>
                 </div>
-                <p className="text-lg font-medium text-emerald-800 dark:text-emerald-200">{question.answer}</p>
+                <p className="text-sm lg:text-lg font-medium text-emerald-800 dark:text-emerald-200">{question.answer}</p>
               </div>
             </div>
 
@@ -191,7 +195,7 @@ export default function AnswerPage({ params }: AnswerPageProps){
               {!showExplanation ? (
                 <Button
                   onClick={() => setShowExplanation(true)}
-                  className="w-full py-6 my-2 text-md lg:text-lg bg-slate-100 text-black dark:bg-zinc-700 dark:text-white rounded-2xl border-2 border-slate-200 dark:border-slate-900"
+                  className="w-full py-4 lg:py-6 my-2 text-xs lg:text-sm bg-slate-100 text-black dark:bg-zinc-700 dark:text-white rounded-2xl border-2 border-slate-200 dark:border-slate-900"
                 >
                   <Eye className="w-5 h-5 mr-2" />
                   解説を見る
@@ -199,14 +203,14 @@ export default function AnswerPage({ params }: AnswerPageProps){
               ) : (
                 <div className="bg-gradient-to-r from-amber-50 to-orange-50 dark:from-amber-900/20 dark:to-orange-900/20 rounded-2xl px-6 py-3 border border-amber-200 dark:border-amber-700 space-y-2">
                   <div className="flex items-center gap-2">
-                    <BookOpen className="w-5 h-5 text-amber-600 dark:text-amber-400" />
-                    <h3 className="font-semibold text-amber-700 dark:text-amber-300">解説</h3>
+                    <BookOpen className="w-4 h-4 lg:w-5 lg:h-5 text-amber-600 dark:text-amber-400" />
+                    <h3 className="font-semibold text-xs lg:text-sm text-amber-700 dark:text-amber-300">解説</h3>
                   </div>
-                  <p className="text-slate-700 dark:text-slate-300 leading-relaxed">{question.explanation}</p>
+                  <p className="text-xs lg:text-lg text-slate-700 dark:text-slate-300 leading-relaxed mb-6 lg:mb-12">{question.explanation}</p>
                   <Button
                     onClick={() => setShowExplanation(false)}
                     variant="outline"
-                    className="w-full py-3 border-amber-300 dark:border-amber-600 text-amber-700 dark:text-amber-300 hover:bg-amber-100 dark:hover:bg-amber-900/30 rounded-xl"
+                    className="w-full py-3 text-xs lg:text-sm border-amber-300 dark:border-amber-600 text-amber-700 dark:text-amber-300 hover:bg-amber-100 dark:hover:bg-amber-900/30 rounded-xl"
                   >
                     <EyeOff className="w-4 h-4 mr-2" />
                     解説を閉じる
@@ -219,14 +223,14 @@ export default function AnswerPage({ params }: AnswerPageProps){
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pt-4">
               <Button
                 onClick={handleNext}
-                className="md:col-span-2 py-6 text-md lg:text-lg font-medium bg-gradient-to-r from-indigo-600 to-blue-600 hover:from-indigo-700 hover:to-blue-700 text-white rounded-2xl shadow-lg hover:shadow-xl"
+                className="md:col-span-2 py-3 lg:py-6 text-xs lg:text-sm font-medium lg:font-bold bg-gradient-to-r from-indigo-600 to-blue-600 hover:from-indigo-700 hover:to-blue-700 text-white rounded-2xl shadow-lg hover:shadow-xl"
               >
                 {text}
               </Button>
               {text !== "お疲れ様でした！" && (
                 <Button
                   onClick={handleFinish}
-                  className="md:col-span-1 py-6 text-md lg:text-lg bg-red-500 text-white hover:bg-slate-100 dark:hover:bg-red-600 rounded-2xl"
+                  className="md:col-span-1 py-3 lg:py-6 text-xs lg:text-sm font-medium lg:font-bold bg-red-500 text-white hover:bg-slate-100 dark:hover:bg-red-600 rounded-2xl"
                 >
                   終了
                 </Button>

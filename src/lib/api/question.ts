@@ -7,6 +7,7 @@ export const GetQuestion = async (level: string | null, id: string, token: strin
     cache: "no-store"
   })
 
+
   if (!res.ok) {
     throw new Error("問題の取得に失敗しました");
   }

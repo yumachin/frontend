@@ -196,10 +196,10 @@ export default function RankingPage() {
                         }`}
                     >
                       <CardContent
-                        className={`flex items-center py-4 px-4 lg:px-8 gap-4 ${user.isMe ? "text-black" : ""
+                        className={`flex items-center lg:py-4 pl-2 pr-4 lg:px-8 gap-2 lg:gap-4 ${user.isMe ? "text-black" : ""
                           }`}
                       >
-                        <div className="text-xl font-bold w-6 text-center">
+                        <div className="text-sm lg:text-xl font-bold w-6 text-center">
                           {rank}
                         </div>
                         <Avatar>
@@ -211,14 +211,14 @@ export default function RankingPage() {
                         </Avatar>
                         <div className="flex-1">
                           <div
-                            className={`text-sm ${user.isMe ? "text-black font-bold" : "font-medium"
+                            className={`text-xs lg:text-sm ${user.isMe ? "text-black font-bold" : "font-medium"
                               }`}
                           >
                             {user.isMe ? "あなた" : user.userName}
                           </div>
                         </div>
                         <div
-                          className={`text-sm font-semibold text-gray-700 dark:text-gray-300 ${user.isMe ? "dark:text-gray-900" : ""
+                          className={`text-xs lg:text-sm font-semibold text-gray-700 dark:text-gray-300 ${user.isMe ? "dark:text-gray-900" : ""
                             }`}
                         >
                           {score} pt
