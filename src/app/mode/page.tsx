@@ -35,7 +35,7 @@ export default function ModePage() {
 		<div className="fixed inset-0 flex flex-col items-center justify-center min-h-screen px-4 text-center">
       <div className='h-18'></div>
       <h1 className="text-3xl font-bold tracking-tight sm:text-4xl md:text-5xl lg:text-6xl mb-12">
-        モード選択
+        難易度選択
       </h1>
 
       <div className="flex flex-col w-full max-w-xs gap-6 sm:max-w-md">

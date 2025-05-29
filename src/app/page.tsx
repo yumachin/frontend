@@ -8,6 +8,7 @@ import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import Footer from "@/components/footer"
 import Loading from "@/components/loading"
+import { useRouter } from "next/navigation"
 
 const codeString = `
 <p className="mx-auto max-w-[700px] text-sm sm:text-base text-gray-500 dark:text-gray-400">
@@ -23,6 +24,7 @@ const codeString = `
 export default function HomePage() {
   const { theme } = useTheme()
   const [mounted, setMounted] = useState(false)
+  const router = useRouter()
 
   useEffect(() => {
     setMounted(true)
@@ -61,9 +63,9 @@ export default function HomePage() {
               variant="outline"
               size="lg"
               className="w-full sm:w-auto font-bold"
-              onClick={() => alert("マルチモードは現在開発中です。")}
+              onClick={() => router.push("/multi")}
             >
-              マルチモード（開発中）
+              マルチモード
             </Button>
           </div>
         </div>
