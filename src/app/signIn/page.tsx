@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import Link from "next/link"
 import { Eye, EyeOff } from "lucide-react"
 import { Button } from "@/components/ui/button"
@@ -28,6 +28,12 @@ export default function SignInPage() {
   const [showPassword, setShowPassword] = useState(false)
   const [isSigningIn, setIsSigningIn] = useState(false)
   const oneHourLater = new Date(new Date().getTime() + 1 * 60 * 60 * 1000);
+  const userId = Cookies.get("userId") || null
+  const token = Cookies.get("token") || null
+
+  useEffect(() => {
+    (userId && token) && router.push("/")
+  }, [])
 
   const handleGoogleLogin = async (): Promise<boolean> => {
     if (isSigningIn) return false
@@ -151,7 +157,7 @@ export default function SignInPage() {
             </Button>
           </CardContent>
           <CardFooter className="flex flex-col space-y-4 pt-0">
-            <div className="text-center text-sm text-zinc-400">
+            <div className="text-center text-xs lg:text-sm text-zinc-400">
               アカウントをお持ちでないですか？{" "}
               <Link href="#" onClick={() => alert("新規登録機能は開発中です。")} className="text-white hover:underline">
                 新規登録
