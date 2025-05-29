@@ -82,7 +82,7 @@ export default function HardQuizClient({ question, id }: { question: QuestionTyp
                       selectedAnswer === alph ? "bg-orange-500 text-white" : "bg-gray-100 text-gray-700"
                     }`}
                   >
-                    {index+1}
+                    {alph}
                   </div>
                   <span className="text-xs lg:text-lg">{option}</span>
                   {selectedAnswer === alph && <CheckCircle className="absolute right-4 text-orange-500 h-6 w-6" />}
