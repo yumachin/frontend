@@ -41,7 +41,7 @@ export default function EasyQuizClient({ question, id } : { question: QuestionTy
   }
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center px-8 lg:px-0">
+    <div className="fixed inset-0 min-h-screen flex flex-col items-center justify-center px-8 lg:px-0">
       <div className="w-full max-w-4xl">
         <div className="pt-6 rounded-2xl border-2 lg:border-3">
           <div className="relative">
@@ -94,7 +94,7 @@ export default function EasyQuizClient({ question, id } : { question: QuestionTy
           {/* フッター部分 */}
           <div className="p-6 flex justify-end">
             <button
-              className={`px-4 py-1 lg:px-8 lg:py-3 rounded-lg font-medium transition-all ${
+              className={`px-4 py-1.5 lg:px-8 lg:py-3 rounded-md lg:rounded-lg font-medium text-xs lg:text-sm transition-all ${
                 selectedAnswer
                   ? "bg-orange-400 text-white hover:bg-orange-500"
                   : "bg-gray-200 text-gray-400 cursor-not-allowed"

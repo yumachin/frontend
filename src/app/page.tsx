@@ -34,7 +34,7 @@ export default function HomePage() {
 
   return (
     <>
-      <section className="flex flex-col justify-center items-center min-h-screen w-full py-8 md:py-16 lg:py-24 xl:py-32">
+      <section className="fixed inset-0 flex flex-col justify-center items-center min-h-screen w-full py-8 md:py-16 lg:py-24 xl:py-32">
         <div className="h-8" />
         <div className="flex flex-col items-center justify-center space-y-4 text-center">
           <div className="space-y-2 lg:space-y-4 mb-16 px-4 sm:px-6 lg:px-8">

@@ -14,22 +14,22 @@ export default function Level({ selectedLevel, onLevelChange }: LevelProps) {
         {
             value: "easy",
             label: "初級",
-            icon: <Baby className="w-6 h-6" />,
+            icon: <Baby className="w-4 h-4 lg:w-6 lg:h-6" />,
         },
         {
             value: "normal",
             label: "中級",
-            icon: <Smile className="w-6 h-6" />,
+            icon: <Smile className="w-4 h-4 lg:w-6 lg:h-6" />,
         },
         {
             value: "hard",
             label: "上級",
-            icon: <Skull className="w-6 h-6" />,
+            icon: <Skull className="w-4 h-4 lg:w-6 lg:h-6" />,
         },
         {
             value: "all",
             label: "総合",
-            icon: <Crown className="w-6 h-6" />,
+            icon: <Crown className="w-4 h-4 lg:w-6 lg:h-6" />,
         },
     ] as const
 
@@ -46,12 +46,12 @@ export default function Level({ selectedLevel, onLevelChange }: LevelProps) {
                                 }`}
                         >
                             <div
-                                className={`p-3 rounded-full transition-colors ${isSelected ? "bg-orange-300 text-white" : "bg-muted hover:bg-accent"
+                                className={`p-2 lg:p-3 rounded-full transition-colors ${isSelected ? "bg-orange-300 text-white" : "bg-muted hover:bg-accent"
                                     }`}
                             >
                                 {item.icon}
                             </div>
-                            <span>{item.label}</span>
+                            <span className="text-xs lg:text-sm mt-1">{item.label}</span>
                         </button>
 
                     )

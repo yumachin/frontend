@@ -83,7 +83,6 @@ export default function ProfilePage() {
 
   const handleEdit = async (data: ProfileFormData) => {
     try {
-      console.log("newUserName", data.userName)
       const message = await UpdateProfile(userId, token, data.userName);
       console.log(message)
       if (message) {
@@ -118,9 +117,9 @@ export default function ProfilePage() {
                 <CardHeader className="flex items-center justify-between">
                   <CardTitle>プロフィール</CardTitle>
                   {!isEditing && (
-                    <Button variant="outline" size="sm" onClick={() => setIsEditing(true)}>
+                    <button className="text-xs border-2 px-1.5 lg:px-3 py-0.5 lg:py-1.5 rounded-sm" onClick={() => setIsEditing(true)}>
                       編集
-                    </Button>
+                    </button>
                   )}
                 </CardHeader>
                 <CardContent className="flex items-center gap-4 lg:gap-8">
@@ -174,8 +173,8 @@ export default function ProfilePage() {
               </Card>
 
               <Card>
-                <CardHeader className="flex flex-row items-center justify-between pb-2">
-                  <CardTitle>総正答数</CardTitle>
+                <CardHeader className="flex flex-row items-center justify-between lg:pb-2">
+                  <CardTitle className="text-xs lg:text-lg">総正答数</CardTitle>
                 </CardHeader>
                 <CardContent>
                   <div className="text-2xl font-bold">{clearCount}</div>
@@ -183,8 +182,8 @@ export default function ProfilePage() {
               </Card>
               
               <Card>
-                <CardHeader className="flex flex-row items-center justify-between pb-2">
-                  <CardTitle>総回答数</CardTitle>
+                <CardHeader className="flex flex-row items-center justify-between lg:pb-2">
+                  <CardTitle className="text-xs lg:text-lg">総回答数</CardTitle>
                 </CardHeader>
                 <CardContent>
                   <div className="text-2xl font-bold">{correctCount}</div>

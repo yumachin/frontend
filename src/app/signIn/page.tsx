@@ -80,7 +80,7 @@ export default function SignInPage() {
   return isSigningIn ? (
     <Loading />
   ) : (
-    <div className="min-h-screen bg-black text-white flex flex-col">
+    <div className="fixed inset-0 min-h-screen bg-black text-white flex flex-col">
       {/* Main Content */}
       <main className="flex-1 flex items-center justify-center p-4">
         <Card className="w-full max-w-md bg-zinc-900 border-zinc-800">
