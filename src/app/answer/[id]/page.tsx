@@ -3,7 +3,7 @@
 import { use, useEffect, useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
-import { BookOpen, CheckCircle2, CircleCheck, Eye, EyeOff, User, XCircle } from "lucide-react"
+import { BookOpen, CheckCircle2, CircleCheck, Eye, EyeOff, List, User, XCircle } from "lucide-react"
 import { useRouter, useSearchParams } from "next/navigation"
 import { GetQuestion } from "@/lib/api/question"
 import { QuestionType } from "@/types/type"
@@ -107,12 +107,12 @@ export default function AnswerPage({ params }: AnswerPageProps){
     <div className="min-h-screen flex justify-center items-center py-4 px-6">
       <div className="w-full max-w-4xl">
         <Card className="border-0 shadow-2xl rounded-3xl">
-          <CardContent className="px-6 pb-2 space-y-8">
+          <CardContent className="px-6 pb-2 lg:pb-6 space-y-8">
             {/* ヘッダー */}
             <div className="text-center">
               <div className="flex justify-between items-center">
                 <div className="flex-1"></div>
-                <div className="inline-flex items-center gap-2 px-4 dark:text-white rounded-full text-sm lg:text-lg">
+                <div className="inline-flex items-center gap-2 px-4 pb-4 dark:text-white rounded-full text-sm lg:text-lg">
                   <BookOpen className="w-4 h-4 lg:h-6 lg:w-6" />第 {unwrapParams.id} 問
                 </div>
               </div>
@@ -121,9 +121,9 @@ export default function AnswerPage({ params }: AnswerPageProps){
                 <div className="flex flex-col items-center">
                   {answered ? (
                     <>
-                      <div className="relative">
+                      <div className="relative mb-2">
                         <div className="absolute inset-0 bg-green-400 rounded-full blur-xl opacity-30 animate-pulse"></div>
-                        <CircleCheck className="relative w-20 h-20 lg:w-24 lg:h-24 text-green-500" />
+                        <CircleCheck className="relative w-24 h-24 lg:w-30 lg:h-30 text-green-500" />
                       </div>
                       <h2 className="text-2xl lg:text-3xl font-bold bg-gradient-to-r from-green-600 to-emerald-600 bg-clip-text text-transparent">
                         正解！
@@ -133,7 +133,7 @@ export default function AnswerPage({ params }: AnswerPageProps){
                     <>
                       <div className="relative">
                         <div className="absolute inset-0 bg-red-400 rounded-full blur-xl opacity-30 animate-pulse"></div>
-                        <XCircle className="relative w-24 h-24 text-red-500" />
+                        <XCircle className="relative w-24 h-24 lg:w-30 lg:h-30 text-red-500" />
                       </div>
                       <h2 className="text-3xl font-bold bg-gradient-to-r from-red-600 to-rose-600 bg-clip-text text-transparent">
                         不正解...
@@ -144,17 +144,47 @@ export default function AnswerPage({ params }: AnswerPageProps){
               )}
             </div>
 
-            {/* 問題文 */}
-            <div className="bg-slate-50 dark:bg-black rounded-2xl p-6 border-2 border-slate-200 dark:border-slate-900">
-              <div className="flex items-center gap-2 mb-3">
-                <BookOpen className="w-4 h-4 lg:w-5 lg:h-5 text-blue-600 dark:text-blue-400" />
-                <h3 className="font-semibold text-slate-700 dark:text-slate-300 text-sm lg:text-sm">問題</h3>
+            <div>
+              {/* 問題文 */}
+              <div className="mb-2 bg-slate-50 dark:bg-black rounded-2xl p-6 border-2 border-slate-200 dark:border-slate-900">
+                <div className="flex items-center gap-2 mb-3">
+                  <BookOpen className="w-4 h-4 lg:w-5 lg:h-5 text-blue-600 dark:text-blue-400" />
+                  <h3 className="font-semibold text-slate-700 dark:text-slate-300 text-xs lg:text-sm">問題</h3>
+                </div>
+                <p className="text-slate-800 dark:text-slate-200 text-xs lg:text-base leading-relaxed">{question.question}</p>
               </div>
-              <p className="text-slate-800 dark:text-slate-200 text-xs lg:text-lg leading-relaxed">{question.question}</p>
+
+              {/* 選択肢 */}
+              <div className="bg-slate-50 dark:bg-black rounded-2xl p-6 border-2 border-slate-200 dark:border-slate-900">
+                <div className="flex items-center gap-2 mb-3">
+                  <List className="w-4 h-4 lg:w-5 lg:h-5 text-blue-600 dark:text-blue-400" />
+                  <h3 className="font-semibold text-slate-700 dark:text-slate-300 text-xs lg:text-sm">選択肢</h3>
+                </div>
+                <div className="grid gap-2">
+                  {["A", "B", "C", "D"].map((alph, index) => {
+                    const optionKey = `option${index+1}` as "option1" | "option2" | "option3" | "option4";;
+                    const option = question[optionKey];
+
+                    return (
+                      <button
+                        key={index}
+                        className={"relative flex items-center px-2 py-1 lg:py-2 rounded-xl border-1 light:bg-gray-500"}
+                      >
+                        <div
+                          className={"flex items-center justify-center h-5 w-5 lg:h-7 lg:w-7 rounded-full mr-3 lg:mr-4 text-xs lg:text-lg font-medium bg-gray-100 text-gray-700"}
+                        >
+                          {alph}
+                        </div>
+                        <span className="text-xs lg:text-base">{option}</span>
+                      </button>
+                    )
+                  })}
+                </div>
+              </div>
             </div>
 
             {/* 回答比較 */}
-            <div className="grid gap-4">
+            <div className="grid gap-2">
               {/* ユーザーの回答 */}
               <div
                 className={`rounded-2xl px-6 py-3 border-2 ${
@@ -206,7 +236,7 @@ export default function AnswerPage({ params }: AnswerPageProps){
                     <BookOpen className="w-4 h-4 lg:w-5 lg:h-5 text-amber-600 dark:text-amber-400" />
                     <h3 className="font-semibold text-xs lg:text-sm text-amber-700 dark:text-amber-300">解説</h3>
                   </div>
-                  <p className="text-xs lg:text-lg text-slate-700 dark:text-slate-300 leading-relaxed mb-6 lg:mb-12">{question.explanation}</p>
+                  <p className="text-xs lg:text-base text-slate-700 dark:text-slate-300 leading-relaxed mb-6 lg:mb-12">{question.explanation}</p>
                   <Button
                     onClick={() => setShowExplanation(false)}
                     variant="outline"
