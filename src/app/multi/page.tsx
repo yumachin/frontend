@@ -7,7 +7,7 @@ import { Plus, LogIn } from "lucide-react"
 import { CreateRoomModal } from "@/components/create-room-modal"
 import { JoinRoomModal } from "@/components/join-room-modal"
 
-export default function HomePage() {
+export default function MultiPage() {
   const [showCreateModal, setShowCreateModal] = useState(false)
   const [showJoinModal, setShowJoinModal] = useState(false)
 
@@ -19,7 +19,7 @@ export default function HomePage() {
           <CardDescription className="text-xs lg:text-sm">新しいルームを作成するか、既存のルームに参加してください</CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
-          <Button className="w-full h-10 text-sm lg:text-base" onClick={() => setShowCreateModal(true)}>
+          <Button className="w-full h-10 text-sm lg:text-base bg-gray-500 dark:bg-white" onClick={() => setShowCreateModal(true)}>
             <Plus className="mr-2 h-5 w-5" />
             ルームを作成
           </Button>

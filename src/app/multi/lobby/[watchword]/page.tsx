@@ -4,38 +4,67 @@ import { useRouter, useSearchParams } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Users, Copy, Check } from "lucide-react"
-import { useState } from "react"
+import { use, useState } from "react"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 
-
-const user = {
-  "userId": "UN1czOzwaZQWyzbPunXGx6byDPl2",
-  "email": "e1922047@oit.ac.jp",
-  "userName": "中井裕麻",
-  "iconPath": "default.png",
-  "role": "user",
-  "stats": {
-    "hardClearNum": 0,
-    "normalClearNum": 0,
-    "easyClearNum": 0,
-    "hardCorrectNum": 0,
-    "normalCorrectNum": 0,
-    "easyCorrectNum": 0
+const users = [
+  {
+    "userId": "UN1czOzwaZQWyzbPunXGx6byDPl2",
+    "email": "e1922047@oit.ac.jp",
+    "userName": "中井裕麻",
+    "iconPath": "default.png",
+    "role": "user",
+    "stats": {
+      "hardClearNum": 0,
+      "normalClearNum": 0,
+      "easyClearNum": 0,
+      "hardCorrectNum": 0,
+      "normalCorrectNum": 0,
+      "easyCorrectNum": 0
+    },
+    "createdAt": "2025-05-29T12:47:39.152Z",
+    "updatedAt": "2025-05-29T12:47:39.152Z"
   },
-  "createdAt": "2025-05-29T12:47:39.152Z",
-  "updatedAt": "2025-05-29T12:47:39.152Z"
+  {
+    "userId": "UN1czOzwaZQWyzbPunXGx6byDPl3",
+    "email": "e1922047@oit.ac.jp",
+    "userName": "中井裕麻",
+    "iconPath": "default.png",
+    "role": "user",
+    "stats": {
+      "hardClearNum": 0,
+      "normalClearNum": 0,
+      "easyClearNum": 0,
+      "hardCorrectNum": 0,
+      "normalCorrectNum": 0,
+      "easyCorrectNum": 0
+    },
+    "createdAt": "2025-05-29T12:47:39.152Z",
+    "updatedAt": "2025-05-29T12:47:39.152Z"
+  },
+]
+
+type LobbyPageProps = {
+  params: Promise<{ watchword: string }>
 }
 
-export default function WaitingPage() {
+export default function LobbyPage({ params }: LobbyPageProps) {
   const searchParams = useSearchParams()
   const roomCode = searchParams.get("code") || "Arena"
   const [copied, setCopied] = useState(false)
+  const unwrapParams = use(params);
   const router = useRouter()
+  const canStart = users.length >= 2
+  const hostId = "UN1czOzwaZQWyzbPunXGx6byDPl2"
 
   const copyRoomCode = async () => {
     await navigator.clipboard.writeText(roomCode)
     setCopied(true)
     setTimeout(() => setCopied(false), 2000)
+  }
+
+  const handleStartQuiz = () => {
+    router.push(`/multi/quiz/${roomCode}`)
   }
 
   return (
@@ -62,17 +91,19 @@ export default function WaitingPage() {
           </div>
 
           <div className="space-y-3">
-            <Button className="w-full" disabled>
+            <Button
+              className="w-full"
+              disabled={!canStart}
+              onClick={handleStartQuiz}
+            >
               クイズを開始 (最低2人必要)
             </Button>
             <Button
               variant="outline"
               className="w-full"
               onClick={() => {
-                // ルーム退出処理をここに追加
                 router.push("/multi")
-              }
-              }
+              }}
             >
               ルームを退出
             </Button>
@@ -84,20 +115,19 @@ export default function WaitingPage() {
         <CardHeader>
           <CardTitle className="text-base lg:text-lg">参加者一覧</CardTitle>
         </CardHeader>
-        <CardContent>
-          <div className="flex justify-between items-center gap-6 p-4 bg-muted rounded-2xl">
-            <div className="flex items-center gap-3 lg:gap-6">
-              <Avatar className="h-8 w-8 lg:h-12 lg:w-12">
-                {/* 写真を登録できるようになったらこれにする */}
-                {/* <AvatarImage src={`${process.env.NEXT_PUBLIC_API_URL}/${user.iconPath}`} alt={user.userName} />
-                <AvatarFallback>{user.userName.charAt(0) ?? "?"}</AvatarFallback> */}
-                <AvatarImage src={`https://api.dicebear.com/7.x/thumbs/svg?seed=${user.userName}`} alt={user.userName} />
-                <AvatarFallback>{user.userName.charAt(0) ?? "?"}</AvatarFallback>
-              </Avatar>
-              <span className="font-medium text-sm lg:text-base">あなた</span>
+        <CardContent className="space-y-2">
+          {users.map((user) => (
+            <div key={user.userId} className="flex justify-between items-center gap-6 pl-3 pr-2 py-2 bg-muted rounded-2xl">
+              <div className="flex items-center gap-3 lg:gap-6">
+                <Avatar className="h-7 w-7 lg:h-12 lg:w-12">
+                  <AvatarImage src={`https://api.dicebear.com/7.x/thumbs/svg?seed=${user.userName}`} alt={user.userName} />
+                  <AvatarFallback>{user.userName.charAt(0) ?? "?"}</AvatarFallback>
+                </Avatar>
+                <span className="font-medium text-sm lg:text-base">{user.userName}</span>
+              </div>
+              <span className="text-xs">{user.userId === hostId ? "ホスト" : ""}</span>
             </div>
-            <span className="text-xs">ホスト</span>
-          </div>
+          ))}
         </CardContent>
       </Card>
     </div>

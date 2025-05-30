@@ -11,9 +11,11 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog"
-import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Loader2 } from "lucide-react"
+import { useForm } from "react-hook-form"
+import { zodResolver } from "@hookform/resolvers/zod"
+import { WatchwordFormData, WatchwordSchema } from "@/utils/validationSchema"
 
 type CreateRoomModalProps = {
   open: boolean
@@ -21,21 +23,27 @@ type CreateRoomModalProps = {
 }
 
 export function CreateRoomModal({ open, onOpenChange }: CreateRoomModalProps) {
-  const [roomCode, setRoomCode] = useState("")
+  const [watchword, setWatchword] = useState("")
   const [isCreating, setIsCreating] = useState(false)
   const router = useRouter()
+  const form = useForm<WatchwordFormData>({
+    resolver: zodResolver(WatchwordSchema),
+    defaultValues: {
+      
+    },
+  });
 
-  const generateRandomCode = () => {
+  const generateRandomWatchword = () => {
     const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789あいうえおかきくけこさしすせそたちつてとなにぬねのはひふへほまみむめもやゆよらりるれろわをん"
     let result = ""
     for (let i = 0; i < 6; i++) {
       result += chars.charAt(Math.floor(Math.random() * chars.length))
     }
-    setRoomCode(result)
+    setWatchword(result)
   }
 
   const handleCreate = async () => {
-    if (!roomCode.trim()) return
+    if (!watchword.trim()) return
 
     setIsCreating(true)
 
@@ -44,14 +52,14 @@ export function CreateRoomModal({ open, onOpenChange }: CreateRoomModalProps) {
 
     setIsCreating(false)
     onOpenChange(false)
-    router.push(`/multi/wait?code=${roomCode}`)
+    router.push(`/multi/lobby/${watchword}`)
   }
 
   const handleOpenChange = (newOpen: boolean) => {
     if (!isCreating) {
       onOpenChange(newOpen)
       if (!newOpen) {
-        setRoomCode("")
+        setWatchword("")
       }
     }
   }
@@ -70,15 +78,16 @@ export function CreateRoomModal({ open, onOpenChange }: CreateRoomModalProps) {
           <div className="space-y-2">
             <Label htmlFor="room-code" className="text-xs lg:text-sm ml-1">合言葉</Label>
             <div className="flex gap-2">
-              <Input
+              <input
                 id="room-code"
-                className="text-sm lg:text-base"
+                type="text"
+                value={watchword}
                 placeholder="合言葉を入力"
-                value={roomCode}
-                onChange={(e) => setRoomCode(e.target.value)}
-                maxLength={6}
+                {...form.register("watchword")}
+                onChange={(e) => setWatchword(e.target.value)}
+                className="text-sm lg:text-base w-full px-3 py-2 rounded-md"
               />
-              <Button type="button" variant="outline" onClick={generateRandomCode} disabled={isCreating}>
+              <Button type="button" variant="outline" onClick={generateRandomWatchword} disabled={isCreating}>
                 自動生成
               </Button>
             </div>
@@ -87,10 +96,15 @@ export function CreateRoomModal({ open, onOpenChange }: CreateRoomModalProps) {
         </div>
 
         <DialogFooter className="gap-2 sm:gap-4">
-          <Button variant="outline" onClick={() => handleOpenChange(false)} disabled={isCreating}>
+          <Button
+            variant="outline"
+            onClick={() => handleOpenChange(false)}
+            disabled={isCreating}
+            className="text-xs"
+          >
             キャンセル
           </Button>
-          <Button onClick={handleCreate} disabled={!roomCode.trim() || isCreating}>
+          <Button onClick={handleCreate} disabled={!watchword.trim() || isCreating} className="bg-gray-600 dark:bg-white">
             {isCreating && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
             作成
           </Button>

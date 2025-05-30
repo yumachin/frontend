@@ -260,7 +260,7 @@ export default function AnswerPage({ params }: AnswerPageProps){
               {text !== "お疲れ様でした！" && (
                 <Button
                   onClick={handleFinish}
-                  className="md:col-span-1 py-3 lg:py-6 text-xs lg:text-sm font-medium lg:font-bold bg-red-500 text-white hover:bg-slate-100 dark:hover:bg-red-600 rounded-2xl"
+                  className="md:col-span-1 py-3 lg:py-6 text-xs lg:text-sm font-medium lg:font-bold bg-red-500 text-white hover:bg-red-600 dark:hover:bg-red-600 rounded-2xl"
                 >
                   終了
                 </Button>
