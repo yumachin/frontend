@@ -8,7 +8,6 @@ import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import Footer from "@/components/footer"
 import Loading from "@/components/loading"
-import { useRouter } from "next/navigation"
 
 const codeString = `
 <p className="mx-auto max-w-[700px] text-sm sm:text-base text-gray-500 dark:text-gray-400">
@@ -24,7 +23,6 @@ const codeString = `
 export default function HomePage() {
   const { theme } = useTheme()
   const [mounted, setMounted] = useState(false)
-  const router = useRouter()
 
   useEffect(() => {
     setMounted(true)
@@ -55,18 +53,21 @@ export default function HomePage() {
           </div>
           <div className="flex flex-col sm:flex-row gap-3 sm:space-x-4">
             <Link href="/mode" passHref>
-              <Button size="lg" className="w-full sm:w-auto font-bold">
+              <Button
+                className="w-full sm:w-auto font-bold bg-gray-500 dark:bg-white px-16 py-6 text-xs lg:text-sm"
+              >
                 シングルモード
               </Button>
             </Link>
-            <Button
-              variant="outline"
-              size="lg"
-              className="w-full sm:w-auto font-bold"
-              onClick={() => router.push("/multi")}
-            >
-              マルチモード
-            </Button>
+            <Link href="/multi" passHref>
+              <Button
+                variant="outline"
+                size="lg"
+                className="w-full sm:w-auto font-bold px-16 py-6 text-xs lg:text-sm"
+              >
+                マルチモード
+              </Button>
+            </Link>
           </div>
         </div>
       </section>

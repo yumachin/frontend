@@ -22,13 +22,13 @@ type JoinRoomModalProps = {
 }
 
 export function JoinRoomModal({ open, onOpenChange }: JoinRoomModalProps) {
-  const [roomCode, setRoomCode] = useState("")
+  const [watchword, setWatchword] = useState("")
   const [isJoining, setIsJoining] = useState(false)
   const [error, setError] = useState("")
   const router = useRouter()
 
   const handleJoin = async () => {
-    if (!roomCode.trim()) return
+    if (!watchword.trim()) return
 
     setIsJoining(true)
     setError("")
@@ -42,7 +42,7 @@ export function JoinRoomModal({ open, onOpenChange }: JoinRoomModalProps) {
     if (roomExists) {
       setIsJoining(false)
       onOpenChange(false)
-      router.push(`/waiting?code=${roomCode}`)
+      router.push(`/multi/lobby/${watchword}`)
     } else {
       setError("指定された合言葉のルームが見つかりません")
       setIsJoining(false)
@@ -53,7 +53,7 @@ export function JoinRoomModal({ open, onOpenChange }: JoinRoomModalProps) {
     if (!isJoining) {
       onOpenChange(newOpen)
       if (!newOpen) {
-        setRoomCode("")
+        setWatchword("")
         setError("")
       }
     }
@@ -73,15 +73,15 @@ export function JoinRoomModal({ open, onOpenChange }: JoinRoomModalProps) {
             <Input
               id="join-room-code"
               placeholder="合言葉を入力"
-              value={roomCode}
+              value={watchword}
               onChange={(e) => {
-                setRoomCode(e.target.value.toUpperCase())
+                setWatchword(e.target.value)
                 setError("")
               }}
               maxLength={10}
               className="font-mono text-sm lg:text-base"
               onKeyDown={(e) => {
-                if (e.key === "Enter" && roomCode.trim() && !isJoining) {
+                if (e.key === "Enter" && watchword.trim() && !isJoining) {
                   handleJoin()
                 }
               }}
@@ -97,10 +97,15 @@ export function JoinRoomModal({ open, onOpenChange }: JoinRoomModalProps) {
         </div>
 
         <DialogFooter className="gap-2 sm:gap-4">
-          <Button variant="outline" onClick={() => handleOpenChange(false)} disabled={isJoining}>
+          <Button 
+            variant="outline"
+            onClick={() => handleOpenChange(false)}
+            disabled={isJoining}
+            className="text-xs"
+          >
             キャンセル
           </Button>
-          <Button onClick={handleJoin} disabled={!roomCode.trim() || isJoining}>
+          <Button onClick={handleJoin} disabled={!watchword.trim() || isJoining}>
             {isJoining && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
             参加
           </Button>

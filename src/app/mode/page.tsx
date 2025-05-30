@@ -22,10 +22,10 @@ export default function ModePage() {
       <span className={isDone ? "text-red-500 dark:text-red-400 font-bold" : ""}>
 				{isDone ? "完了" : levelName}
 			</span>
-      <span className="absolute right-4 bottom-2 text-sm flex items-center gap-2">
-        <span className="flex items-center gap-1">
+      <span className="absolute right-2 lg:right-4 bottom-2 text-sm flex items-center">
+        <span className="flex items-center gap-2 text-xs lg:text-sm">
           <PencilLine size={16} />
-          {correctNum}
+          {correctNum} / {Number(process.env.NEXT_PUBLIC_QUESTION_COUNT)}
         </span>
       </span>
     </>
@@ -52,7 +52,7 @@ export default function ModePage() {
           <Link href="/quiz/easy" passHref>
             <Button
               size="lg"
-              className="w-full h-20 text-xl font-semibold shadow-md light:bg-black-900 relative light:text-white dark:hover:bg-gray-100"
+              className="w-full h-20 text-xl font-semibold shadow-md relative bg-gray-500 hover:bg-gray-600 dark:bg-white dark:hover:bg-gray-100"
             >
               {renderButtonContent("初級", user.stats.easyCorrectNum, false)}
             </Button>
@@ -71,7 +71,7 @@ export default function ModePage() {
           <Link href="/quiz/normal" passHref>
             <Button
               size="lg"
-              className="w-full h-20 text-xl font-semibold shadow-md light:bg-black-900 relative light:text-white dark:hover:bg-gray-100"
+              className="w-full h-20 text-xl font-semibold shadow-md relative bg-gray-500 hover:bg-gray-600 dark:bg-white dark:hover:bg-gray-100"
             >
               {renderButtonContent("中級", user.stats.normalCorrectNum, false)}
             </Button>
@@ -90,7 +90,7 @@ export default function ModePage() {
           <Link href="/quiz/hard" passHref>
             <Button
               size="lg"
-              className="w-full h-20 text-xl font-semibold shadow-md light:bg-black-900 relative light:text-white dark:hover:bg-gray-100"
+              className="w-full h-20 text-xl font-semibold shadow-md relative bg-gray-500 hover:bg-gray-600 dark:bg-white dark:hover:bg-gray-100"
             >
               {renderButtonContent("上級", user.stats.hardCorrectNum, false)}
             </Button>
