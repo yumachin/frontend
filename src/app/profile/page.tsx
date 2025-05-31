@@ -111,7 +111,7 @@ export default function ProfilePage() {
             <TabsTrigger value="settings">設定</TabsTrigger>
           </TabsList>
 
-          <TabsContent value="overview" className="space-y-12">
+          <TabsContent value="overview" className="space-y-6 lg:space-y-10">
             <div className="grid gap-4 lg:grid-cols-4">
               <Card className="col-span-2">
                 <CardHeader className="flex items-center justify-between">
@@ -199,6 +199,7 @@ export default function ProfilePage() {
                 <DifficultyProgress difficulty="初級" clearNum={user.stats.easyClearNum} correctNum={user.stats.easyCorrectNum} />
                 <DifficultyProgress difficulty="中級" clearNum={user.stats.normalClearNum} correctNum={user.stats.normalCorrectNum} />
                 <DifficultyProgress difficulty="上級" clearNum={user.stats.hardClearNum} correctNum={user.stats.hardCorrectNum} />
+                <DifficultyProgress difficulty="総合" clearNum={user.stats.hardClearNum + user.stats.easyClearNum + user.stats.normalClearNum} correctNum={user.stats.hardCorrectNum + user.stats.easyCorrectNum + user.stats.normalCorrectNum} />
               </CardContent>
             </Card>
           </TabsContent>
