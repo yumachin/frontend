@@ -56,10 +56,10 @@ export default function MultiQuizPage() {
   }
 
   return (
-    <div className="min-h-screen flex flex-col justify-center items-center gap-30 px-6 bg-background transition-colors duration-300">
+    <div className="min-h-screen flex flex-col justify-center items-center gap-15  px-6 bg-background transition-colors duration-300">
       {/* Question Area */}
-      <Card className="relative w-full max-w-4xl text-center shadow-xl py-8 lg:py-12 bg-slate-50 dark:bg-black border-slate-200 dark:border-slate-900 text-slate-700 dark:text-slate-300">
-        <div className="absolute top-1 left-0 lg:top-2 lg:left-2 font-semibold dark:text-white text-sm lg:text-base px-4 py-1 rounded-full">
+      <Card className="relative w-full max-w-4xl text-center shadow-xl py-36 lg:py-12 bg-slate-50 border-slate-200 dark:border-slate-900 text-slate-700">
+        <div className="absolute top-1 left-0 lg:top-2 lg:left-2 font-semibold text-sm lg:text-base px-4 py-1 rounded-full">
           Q{sampleQuestion.id}
         </div>
         <h1 className="px-6 text-sm lg:text-2xl font-bold leading-tight">
@@ -75,7 +75,7 @@ export default function MultiQuizPage() {
             onClick={() => handleAnswerSelect(option.id)}
             className={`
               ${option.color} ${option.hoverColor} text-white 
-              h-12 lg:h-24 
+              h-16 lg:h-24 
               text-lg lg:text-2xl font-bold
               transition-all duration-200 transform hover:scale-105 active:scale-95
               shadow-lg hover:shadow-xl
