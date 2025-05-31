@@ -58,7 +58,7 @@ export default function MultiQuizPage() {
   return (
     <div className="min-h-screen flex flex-col justify-center items-center gap-15  px-6 bg-background transition-colors duration-300">
       {/* Question Area */}
-      <Card className="relative w-full max-w-4xl text-center shadow-xl py-36 lg:py-12 bg-slate-50 border-slate-200 dark:border-slate-900 text-slate-700">
+      <Card className="relative w-full max-w-4xl text-center shadow-xl py-22 lg:py-12 bg-slate-50 border-slate-200 dark:border-slate-900 text-slate-700">
         <div className="absolute top-1 left-0 lg:top-2 lg:left-2 font-semibold text-sm lg:text-base px-4 py-1 rounded-full">
           Q{sampleQuestion.id}
         </div>
