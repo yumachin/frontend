@@ -169,7 +169,7 @@ export default function RankingPage() {
           <Level onLevelChange={setSelectedLevel} selectedLevel={selectedLevel} />
 
           <ScrollArea className="lg:h-[70vh] mt-4">
-            <div className="space-y-6">
+            <div className="space-y-3">
               {(() => {
                 let prevScore: number | null = null;
                 let rank = 0;
