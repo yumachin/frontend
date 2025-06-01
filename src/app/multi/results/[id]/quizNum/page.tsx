@@ -8,8 +8,7 @@ import { Trophy, Zap } from "lucide-react"
 import { cn } from "@/lib/utils"
 import Confetti from "react-confetti"
 import { useCountUp } from "../../../../../../hooks/useCountUp"
-import { useRouter, useSearchParams } from "next/navigation"
-
+import { useParams, useSearchParams, useRouter } from "next/navigation"
 // 仮データ
 const players = [
   {
@@ -72,18 +71,16 @@ const showNextButton = true
 // ─────────────────────────────
 
 
-export default function ResultPage({ params }: { params: { id: string } }) {
+export default function ResultPage() {
+  const params = useParams();
+  const id = params?.id ; 
   const searchParams = useSearchParams();
-  let currentQuestion = parseInt(searchParams.get("num") ?? "1") || 1
-  if (currentQuestion < 1 || currentQuestion > 10) {
-    currentQuestion = 10
-  }
+  let currentQuestion = parseInt(searchParams.get("num") ?? "1") || 1;
+
+  // ...省略（onNextQuestion等も同様に使える）...
   const router = useRouter();
   const onNextQuestion = () => {
-    console.log("次の問題へ")
-    console.log(params.id)
-    // 次の問題へ遷移
-    router.push(`/multi/quiz/${params.id}`);
+    router.push(`/multi/quiz/${id}`);
   }
   const totalQuestions = 10 // 仮の値、実際はAPIやコンテキストから取得する
   const { resolvedTheme } = useTheme()
@@ -112,7 +109,7 @@ export default function ResultPage({ params }: { params: { id: string } }) {
     <section className="w-full min-h-screen py-10 px-4 flex flex-col items-center bg-gradient-to-br from-purple-50 to-blue-100 dark:from-gray-950 dark:to-gray-900 overflow-x-hidden relative">
       {/* confetti: 1位の時のみ */}
       {winner && winner.isCurrentUser && (
-        <Confetti height={window.innerHeight} numberOfPieces={180} recycle={false} />
+        <Confetti numberOfPieces={180} recycle={false} />
       )}
       {/* ヘッダーがあるので上に余白を入れる */}
       <div className="mt-16" />
