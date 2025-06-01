@@ -86,6 +86,7 @@ export default function ProfilePage() {
       const message = await UpdateProfile(userId, token, data.userName);
       console.log(message)
       if (message) {
+        Cookies.set("userName", data.userName)
         setIsEditing(false);
         window.location.reload();
       }
@@ -97,6 +98,7 @@ export default function ProfilePage() {
   const handleLogout = () => {
     Cookies.remove("token");
     Cookies.remove("userId");
+    Cookies.remove("userName");
     setUser(null);
     router.push("/signIn");
   };

@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import {
@@ -16,6 +16,8 @@ import { Loader2 } from "lucide-react"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { WatchwordFormData, WatchwordSchema } from "@/utils/validationSchema"
+import Cookies from "js-cookie"
+import { socket } from '../lib/socket'
 
 type CreateRoomModalProps = {
   open: boolean
@@ -25,11 +27,13 @@ type CreateRoomModalProps = {
 export function CreateRoomModal({ open, onOpenChange }: CreateRoomModalProps) {
   const [watchword, setWatchword] = useState("")
   const [isCreating, setIsCreating] = useState(false)
+  const [userName, setUserName] = useState('')
+  const [userId, setUserId] = useState('')
   const router = useRouter()
   const form = useForm<WatchwordFormData>({
     resolver: zodResolver(WatchwordSchema),
     defaultValues: {
-      
+      watchword: "",
     },
   });
 
@@ -42,18 +46,69 @@ export function CreateRoomModal({ open, onOpenChange }: CreateRoomModalProps) {
     setWatchword(result)
   }
 
-  const handleCreate = async () => {
+  useEffect(() => {
+    // CookieからユーザーIDとユーザー名を取得、なければ生成
+    let storedUserId = Cookies.get("userId")
+    let storedUserName = decodeURIComponent(Cookies.get("userName") || '');
+
+    setUserId(storedUserId || '');
+    setUserName(storedUserName || '');
+
+    // サーバーに接続
+    if (!socket.connected) {
+      console.log('Socketサーバーに接続しました。');
+      socket.connect();
+    }
+
+    // 接続時にユーザーIDを送信
+    const handleConnect = () => {
+      socket.emit('setUserInfo', { userId: storedUserId, userName: storedUserName });
+    };
+
+    // ルーム作成と参加のイベントハンドラ
+    const handleRoomCreated = ( data: { watchword: string } ) => {
+      console.log('ルームが作成されました。', data.watchword);
+      console.log('ルームを作成しました。遷移先は...', `multi/lobby/${encodeURIComponent(data.watchword)}`);
+      // URLエンコーディングを使用
+      router.push(`/multi/lobby/${encodeURIComponent(data.watchword)}`);
+    };
+
+    const handleError = ( data: { message: string, [key: string]: any } ) => {
+      console.error('Socketエラー：', data);
+      alert(data.message);
+    };
+
+    // イベントリスナーを登録
+    socket.on('roomCreated', handleRoomCreated);
+    socket.on('error', handleError);
+
+    // ユーザーIdとユーザーネームの登録
+    if (socket.connected) {
+      handleConnect();
+    } else {
+      socket.on('connect', handleConnect);
+    }
+
+    // コンポーネントのアンマウント時に全てのイベントリスナーをクリーンアップ
+    return () => {
+      socket.off('connect', handleConnect);
+      socket.off('roomCreated', handleRoomCreated);
+      socket.off('error', handleError);
+    };
+  }, [router]);
+
+  const handleCreateLobby = () => {
+    console.log("watchword:", watchword);
     if (!watchword.trim()) return
-
     setIsCreating(true)
-
-    // シミュレート: ルーム作成API呼び出し
-    await new Promise((resolve) => setTimeout(resolve, 1000))
-
+    if (watchword.trim() && userName.trim()) {
+      console.log('以下の内容を使って、ルームを作成します：', { watchword, userId, userName });
+      socket.emit('createRoom', { watchword, user: { id: userId, name: userName } });
+    }
     setIsCreating(false)
     onOpenChange(false)
     router.push(`/multi/lobby/${watchword}`)
-  }
+  };
 
   const handleOpenChange = (newOpen: boolean) => {
     if (!isCreating) {
@@ -104,7 +159,7 @@ export function CreateRoomModal({ open, onOpenChange }: CreateRoomModalProps) {
           >
             キャンセル
           </Button>
-          <Button onClick={handleCreate} disabled={!watchword.trim() || isCreating} className="bg-gray-600 dark:bg-white">
+          <Button onClick={handleCreateLobby} disabled={!watchword.trim() || isCreating} className="bg-gray-600 dark:bg-white">
             {isCreating && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
             作成
           </Button>

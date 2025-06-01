@@ -27,7 +27,7 @@ export default function SignInPage() {
   const router = useRouter()
   const [showPassword, setShowPassword] = useState(false)
   const [isSigningIn, setIsSigningIn] = useState(false)
-  const oneHourLater = new Date(new Date().getTime() + 1 * 60 * 60 * 1000);
+  const expire = new Date(new Date().getTime() + 3 * 60 * 60 * 1000);
   const userId = Cookies.get("userId") || null
   const token = Cookies.get("token") || null
 
@@ -48,12 +48,17 @@ export default function SignInPage() {
 
       Cookies.set("token", token, {
         // トークンの有効期限はまた話し合って決めたい
-        expires: oneHourLater,
+        expires: expire,
         secure: true,
         sameSite: "none",
       })
       Cookies.set("userId", user.uid || "", {
-        expires: oneHourLater,
+        expires: expire,
+        secure: true,
+        sameSite: "none",
+      })
+      Cookies.set("userName", user.displayName || "", {
+        expires: expire,  
         secure: true,
         sameSite: "none",
       })
@@ -66,6 +71,7 @@ export default function SignInPage() {
 
       await Resister(userObject)
       const profile = await GetProfile(user.uid, token)
+      Cookies.set("userName", profile.userName || "")
       setUser(profile)
       return true
     } catch (error) {

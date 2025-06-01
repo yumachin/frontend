@@ -9,6 +9,7 @@ import { useRouter } from "next/navigation"
 type UserContextType = {
   user: UserType
   setUser: (user: UserType) => void
+  clearUser: () => void
 }
 
 const UserContext = createContext<UserContextType | undefined>(undefined)
@@ -18,10 +19,18 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
   
   const router = useRouter()
 
+  const clearUser = () => {
+    setUser(null)
+    Cookies.remove("userId")
+    Cookies.remove("token")
+    router.push("/signIn")
+  }
+
   useEffect(() => {
     const fetchUser = async () => {
       const userId = Cookies.get("userId")
       const token = Cookies.get("token")
+      
       if (!userId || !token) {
         console.warn("userId or token not found in cookies")
         router.push("/signIn")
@@ -33,15 +42,22 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
         setUser(profile)
       } catch (err) {
         console.error("ユーザー情報の取得に失敗しました:", err)
+        
+        // 401エラーの場合は認証情報をクリアしてサインインページへ
+        if (err instanceof Error && err.message.includes("認証に失敗")) {
+          clearUser()
+          return
+        }
+        
         setUser(null)
       }
     };
 
     fetchUser();
-  }, []);
+  }, [router]);
 
   console.log("Userは(状態管理debug)", user)
-  const contextValue = useMemo(() => ({ user, setUser }), [user])
+  const contextValue = useMemo(() => ({ user, setUser, clearUser }), [user])
 
   return (
     <UserContext.Provider value={contextValue}>

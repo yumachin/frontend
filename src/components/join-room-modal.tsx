@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import {
@@ -15,6 +15,8 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Alert, AlertDescription } from "@/components/ui/alert"
 import { Loader2, AlertCircle } from "lucide-react"
+import { socket } from '../lib/socket';
+import Cookies from "js-cookie"
 
 type JoinRoomModalProps = {
   open: boolean
@@ -24,37 +26,77 @@ type JoinRoomModalProps = {
 export function JoinRoomModal({ open, onOpenChange }: JoinRoomModalProps) {
   const [watchword, setWatchword] = useState("")
   const [isJoining, setIsJoining] = useState(false)
-  const [error, setError] = useState("")
+  const [userName, setUserName] = useState('')
+  const [userId, setUserId] = useState('')
+  // const [error, setError] = useState("")
   const router = useRouter()
 
-  const handleJoin = async () => {
-    if (!watchword.trim()) return
-
-    setIsJoining(true)
-    setError("")
-
-    // シミュレート: ルーム存在確認API呼び出し
-    await new Promise((resolve) => setTimeout(resolve, 1000))
-
-    // ランダムでルームが存在するかどうかを決める（デモ用）
-    const roomExists = Math.random() > 0.3
-
-    if (roomExists) {
-      setIsJoining(false)
-      onOpenChange(false)
-      router.push(`/multi/lobby/${watchword}`)
-    } else {
-      setError("指定された合言葉のルームが見つかりません")
-      setIsJoining(false)
+  useEffect(() => {
+    // CookieからユーザーIDとユーザー名を取得、なければ生成
+    let storedUserId = Cookies.get("userId")
+    let storedUserName = decodeURIComponent(Cookies.get("userName") || '');
+    
+    setUserId(storedUserId || '');
+    setUserName(storedUserName || '');
+    
+    // サーバーに接続
+    if (!socket.connected) {
+      socket.connect();
     }
-  }
+
+    // 接続時にユーザーIDを送信
+    const handleConnect = () => {
+      socket.emit('setUserInfo', { userId: storedUserId, userName: storedUserName });
+    };
+
+    const handleRoomJoined = ( data: { watchword: string} ) => {
+      console.log('ルームに参加しました。遷移先は...', `/room/${encodeURIComponent(data.watchword)}`);
+      // URLエンコーディングを使用
+      router.push(`multi/lobby/${encodeURIComponent(data.watchword)}`);
+    };
+
+    const handleError = ( data: { message: string, [key: string]: any } ) => {
+      console.error('Socketエラー：', data);
+      alert(data.message);
+    };
+
+    // イベントリスナーを登録
+    socket.on('roomJoined', handleRoomJoined);
+    socket.on('error', handleError);
+
+    // ユーザーIdとユーザーネームの登録
+    if (socket.connected) {
+      handleConnect();
+    } else {
+      socket.on('connect', handleConnect);
+    }
+
+    // コンポーネントのアンマウント時に全てのイベントリスナーをクリーンアップ
+    return () => {
+      socket.off('connect', handleConnect);
+      socket.off('roomJoined', handleRoomJoined);
+      socket.off('error', handleError);
+    };
+  }, [router]);
+
+  const handleJoinRoom = () => {
+    if (!watchword.trim()) return
+    setIsJoining(true)
+    if (watchword.trim() && userName.trim()) {
+      console.log('以下の内容を使って、ルームに参加します：', { watchword, userId, userName });
+      socket.emit('joinRoom', { watchword, user: { id: userId, name: userName } });
+    }
+    setIsJoining(false)
+    onOpenChange(false)
+    router.push(`/multi/lobby/${watchword}`)
+  };
 
   const handleOpenChange = (newOpen: boolean) => {
     if (!isJoining) {
       onOpenChange(newOpen)
       if (!newOpen) {
         setWatchword("")
-        setError("")
+        // setError("")
       }
     }
   }
@@ -76,24 +118,24 @@ export function JoinRoomModal({ open, onOpenChange }: JoinRoomModalProps) {
               value={watchword}
               onChange={(e) => {
                 setWatchword(e.target.value)
-                setError("")
+                // setError("")
               }}
               maxLength={10}
               className="font-mono text-sm lg:text-base"
               onKeyDown={(e) => {
                 if (e.key === "Enter" && watchword.trim() && !isJoining) {
-                  handleJoin()
+                  handleJoinRoom()
                 }
               }}
             />
           </div>
 
-          {error && (
+          {/* {error && (
             <Alert variant="destructive">
               <AlertCircle className="h-4 w-4" />
               <AlertDescription>{error}</AlertDescription>
             </Alert>
-          )}
+          )} */}
         </div>
 
         <DialogFooter className="gap-2 sm:gap-4">
@@ -105,7 +147,7 @@ export function JoinRoomModal({ open, onOpenChange }: JoinRoomModalProps) {
           >
             キャンセル
           </Button>
-          <Button onClick={handleJoin} disabled={!watchword.trim() || isJoining}>
+          <Button onClick={handleJoinRoom} disabled={!watchword.trim() || isJoining}>
             {isJoining && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
             参加
           </Button>
