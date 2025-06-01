@@ -2,15 +2,27 @@ export const GetProfile = async (userId: string | undefined, token: string | und
   if (!token || !userId) {
     throw new Error("Token or userId is not found in cookies");
   }
+  
+  console.log("Requesting profile for userId:", userId);
+  console.log("Token exists:", !!token);
+  
   const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/users/${userId}`, {
     cache: "no-store",
     headers: {
-      "Authorization": `Bearer ${token}`
+      "Authorization": `Bearer ${token}`,
+      "Content-Type": "application/json"
     }
   });
 
   if (!res.ok) {
-    throw new Error("プロフィール取得に失敗しました");
+    const errorData = await res.text();
+    console.error("API Error:", res.status, errorData);
+    
+    if (res.status === 401) {
+      throw new Error("認証に失敗しました。再度ログインしてください。");
+    }
+    
+    throw new Error(`プロフィール取得に失敗しました: ${res.status}`);
   }
   
   const data = await res.json();
