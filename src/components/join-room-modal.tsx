@@ -17,6 +17,9 @@ import { Alert, AlertDescription } from "@/components/ui/alert"
 import { Loader2, AlertCircle } from "lucide-react"
 import { socket } from '../lib/socket';
 import Cookies from "js-cookie"
+import { useForm } from "react-hook-form"
+import { WatchwordFormData, WatchwordSchema } from "@/utils/validationSchema"
+import { zodResolver } from "@hookform/resolvers/zod"
 
 type JoinRoomModalProps = {
   open: boolean
@@ -30,6 +33,13 @@ export function JoinRoomModal({ open, onOpenChange }: JoinRoomModalProps) {
   const [userId, setUserId] = useState('')
   // const [error, setError] = useState("")
   const router = useRouter()
+  const form = useForm<WatchwordFormData>({
+    resolver: zodResolver(WatchwordSchema),
+    mode: "onChange",
+    defaultValues: {
+      watchword: "",
+    },
+  });
 
   useEffect(() => {
     // CookieからユーザーIDとユーザー名を取得、なければ生成
@@ -115,12 +125,12 @@ export function JoinRoomModal({ open, onOpenChange }: JoinRoomModalProps) {
             <Input
               id="join-room-code"
               placeholder="合言葉を入力"
+              {...form.register("watchword")}
               value={watchword}
               onChange={(e) => {
                 setWatchword(e.target.value)
                 // setError("")
               }}
-              maxLength={10}
               className="font-mono text-sm lg:text-base"
               onKeyDown={(e) => {
                 if (e.key === "Enter" && watchword.trim() && !isJoining) {

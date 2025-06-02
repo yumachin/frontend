@@ -23,6 +23,7 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
     setUser(null)
     Cookies.remove("userId")
     Cookies.remove("token")
+    Cookies.remove("userName")
     router.push("/signIn")
   }
 
