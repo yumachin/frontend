@@ -59,6 +59,7 @@ export default function MultiQuizPage() {
   const router = useRouter();
   const encodedPassword = params.watchword as string;
   const password = decodeURIComponent(encodedPassword);
+  const [currentQuestion, setCurrentQuestion] = useState(1);
   const [quizState, setQuizState] = useState<QuizState | null>(null);
   const [selectedAnswer, setSelectedAnswer] = useState<number | null>(null);
   const [questionDisplayTime, setQuestionDisplayTime] = useState(5);
@@ -69,7 +70,7 @@ export default function MultiQuizPage() {
     // Cookieからユーザー情報を取得
     const userId = Cookies.get('userId');
     const userName = Cookies.get('userName');
-    
+
     if (!userId || !userName) {
       router.push('/');
       return;
@@ -96,16 +97,18 @@ export default function MultiQuizPage() {
     socket.on('gameStateUpdate', (data) => {
       console.log('Game state updated:', data);
       setQuizState(data);
-      
+
       if (data.timeLeft !== undefined) {
         setCurrentTimeLeft(data.timeLeft);
       }
-      
+      if (data.questionNumber !== undefined) {
+        setCurrentQuestion(data.questionNumber);
+      }
       if (data.gamePhase === 'showQuestion') {
         setSelectedAnswer(null);
         setCanAnswer(false);
         setQuestionDisplayTime(5);
-        
+
         // 5秒間問題を表示してから回答可能にする
         const timer = setInterval(() => {
           setQuestionDisplayTime(prev => {
@@ -117,7 +120,7 @@ export default function MultiQuizPage() {
             return prev - 1;
           });
         }, 1000);
-        
+
         return () => clearInterval(timer);
       }
     });
@@ -151,12 +154,12 @@ export default function MultiQuizPage() {
 
   const handleAnswerSelect = (answerIndex: number) => {
     if (!canAnswer || selectedAnswer !== null || quizState?.gamePhase !== 'showQuestion') return;
-    
+
     setSelectedAnswer(answerIndex);
     const userId = Cookies.get('userId');
-    socket.emit('submitAnswer', { 
-      watchword: password, 
-      userId, 
+    socket.emit('submitAnswer', {
+      watchword: password,
+      userId,
       answerIndex,
       timeLeft: currentTimeLeft
     });
@@ -164,10 +167,10 @@ export default function MultiQuizPage() {
 
   if (!quizState) {
     return (
-      <div style={{ 
-        display: 'flex', 
-        justifyContent: 'center', 
-        alignItems: 'center', 
+      <div style={{
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
         height: '100vh',
         flexDirection: 'column'
       }}>
@@ -179,16 +182,17 @@ export default function MultiQuizPage() {
 
   if (quizState.gamePhase === 'waiting') {
     return (
-      <div style={{ 
-        display: 'flex', 
-        justifyContent: 'center', 
-        alignItems: 'center', 
+      <div style={{
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
         height: '100vh',
         flexDirection: 'column'
       }}>
         <h2>ユーザーを待っています...</h2>
+        <p>もし長い場合は更新してください</p>
         <div style={{ marginTop: '20px' }}>
-          <p>準備完了: {quizState.waitingForUsers ? 
+          <p>準備完了: {quizState.waitingForUsers ?
             quizState.waitingForUsers.length : 0} 人</p>
           {quizState.waitingForUsers && (
             <ul>
@@ -230,7 +234,7 @@ export default function MultiQuizPage() {
   // 結果表示フェーズ
   if (quizState.gamePhase === 'results') {
     const optionsWithStyles = generateOptionsWithStyles(quizState.options);
-    
+
     // オプションが存在しない場合のフォールバック
     if (optionsWithStyles.length === 0) {
       return (
@@ -243,7 +247,7 @@ export default function MultiQuizPage() {
         </div>
       );
     }
-    
+
     return (
       <div className="min-h-screen flex flex-col justify-center items-center gap-30 px-6 bg-background transition-colors duration-300">
         <Card className="relative w-full max-w-4xl text-center shadow-xl py-8 lg:py-12 bg-slate-50 dark:bg-black border-slate-200 dark:border-slate-900 text-slate-700 dark:text-slate-300">

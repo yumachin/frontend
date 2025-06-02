@@ -5,6 +5,7 @@ export const GetProfile = async (userId: string | undefined, token: string | und
   
   console.log("Requesting profile for userId:", userId);
   console.log("Token exists:", !!token);
+  console.log(`${process.env.NEXT_PUBLIC_API_URL}/api/users/${userId}`,)
   
   const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/users/${userId}`, {
     cache: "no-store",
